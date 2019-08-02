@@ -1,6 +1,6 @@
 <?php
 return[
-    'adminEmail' => 'metis@gmail.com',
-    'title' => 'metis',
+    'adminEmail' => 'beautyice@gmail.com',
+    'title' => 'Beautyice',
     'salt' => 'fsddsflj38343lj0',
 ];
