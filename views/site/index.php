@@ -2,12 +2,12 @@
 
 /* @var $this yii\web\View */
 
-$this->title = 'Beautyice';
+$this->title = 'Metis';
 ?>
 <div class="site-index">
 
     <div class="jumbotron">        
-        <h1>Beautyice!</h1>
+        <h1>Metis!</h1>
     </div>
 
     <div class="body-content">
