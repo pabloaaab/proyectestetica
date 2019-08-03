@@ -3,54 +3,43 @@
 namespace app\models;
 
 use Yii;
+use yii\base\Model;
+use app\models\Cliente;
 
 /**
- * This is the model class for table "cliente".
- *
- * @property int $cliente_pk
- * @property string $identificacion
- * @property string $nombre1
- * @property string $nombre2
- * @property string $apellido1
- * @property string $apellido2
- * @property string $telefono
- * @property string $celular
- * @property string $direccion
- * @property string $email
- * @property int $sede_fk
- *
- * @property Sedes $sedeFk
+ * ContactForm is the model behind the contact form.
  */
-class Cliente extends \yii\db\ActiveRecord
+class FormCliente extends Model
 {
-    /**
-     * {@inheritdoc}
-     */
-    public static function tableName()
-    {
-        return 'cliente';
-    }
+        
+    public $cliente_pk;
+    public $identificacion;
+    public $nombre1;
+    public $nombre2;
+    public $apellido1;
+    public $apellido2;
+    public $telefono;
+    public $celular;
+    public $direccion;
+    public $email;
+    public $sede_fk;
 
-    /**
-     * {@inheritdoc}
-     */
     public function rules()
-    {
+    {                    
         return [
             [[ 'nombre1', 'nombre2', 'apellido1', 'apellido2', 'telefono', 'celular', 'direccion', 'email'], 'required'],
             [['sede_fk','identificacion'], 'integer'],
             [['identificacion'], 'string', 'max' => 22],
             [['nombre1', 'nombre2', 'apellido1', 'apellido2', 'telefono', 'celular'], 'string', 'max' => 15],
             [['direccion'], 'string', 'max' => 200],
-            [['email'], 'safe', 'max' => 40],
+            [['email'], 'email', 'max' => 40],
+            ['email', 'email_existe'],    
             [['identificacion'], 'unique'],
             [['sede_fk'], 'exist', 'skipOnError' => true, 'targetClass' => Sedes::className(), 'targetAttribute' => ['sede_fk' => 'sede_pk']],
         ];
+            
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function attributeLabels()
     {
         return [
@@ -68,11 +57,15 @@ class Cliente extends \yii\db\ActiveRecord
         ];
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getSedeFk()
+    
+    public function email_existe($attribute, $params)
     {
-        return $this->hasOne(Sedes::className(), ['sede_pk' => 'sede_fk']);
-    }
+        //Buscar el email en la tabla
+        $table = Cliente::find()->where("email=:email", [":email" => $this->email])->andWhere("consecutivo!=:consecutivo", [':consecutivo' => $this->consecutivo]);
+        //Si el email existe mostrar el error
+        if ($table->count() == 1)
+        {
+            $this->addError($attribute, "El email ya existe".$this->consecutivo);
+        }
+    }        
 }
