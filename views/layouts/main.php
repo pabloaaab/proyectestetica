@@ -42,19 +42,48 @@ if (!Yii::$app->user->isGuest) {
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-center'],
         'items' => [
-            //['label' => 'Inicio', 'url' => ['/site/index']],                        
+            ['label' => 'Inicio', 'url' => ['/site/index']],
             [
-                'label' => 'Administracion',
+                'label' => 'Administración',
                 'items' => [
-                    ['label' => 'Cliente', 'url' => ['/cliente/index']],                    
+                    ['label' => 'Clientes', 'url' => ['/cliente/index']],
+                    ['label' => 'Sedes', 'url' => ['/sede/index']],
+                    ['label' => 'Otros', 'url' => ['/site/index']],
                 ]
-            ],                                    
-            /*[                
+            ],
+            [
+                'label' => 'Procesos',
+                'items' => [
+                    //['label' => 'Matriculas', 'url' => ['/matriculas/index']],
+                    //['label' => 'Periodos Generados', 'url' => ['/periodos/index']],
+                    //['label' => 'Otros', 'url' => ['/site/index']],
+                ]
+            ],
+            [
+                'label' => 'Utilidades',
+                'items' => [
+                    //['label' => 'Informe Pagos', 'url' => ['/informepagos/index']],
+                    //['label' => 'Consulta Niveles', 'url' => ['/matriculas/niveles']],
+                    //['label' => 'Generar Acceso Estudiantes', 'url' => ['/site/generaracceso']],
+                ]
+            ],
+            [
+                'label' => 'Movimientos',
+                'items' => [
+                    /*['label' => 'Otros Pagos', 'url' => ['/pagosotros/index']],
+                    ['label' => 'Pagos Mensualidad', 'url' => ['/pagos/index']],
+                    ['label' => 'Pagos Periodo', 'url' => ['/pagosperiodo/index']],
+                    ['label' => 'HabeasData', 'url' => ['/habeasdata/index']],
+                    ['label' => 'Notas', 'url' => ['/notas/notas']],*/
+                ]
+            ],            
+            [                
                 'label' => 'Configuración',
                 'items' => [
-                    ['label' => 'Usuarios', 'url' => ['/site/usuarios']],                    
+                    ['label' => 'Usuarios', 'url' => ['/site/usuarios']],
+                    ['label' => 'Otros', 'url' => ['/site/index']],
                 ],                
-            ]*/
+            ]
         ],
     ]);
     }
@@ -62,28 +91,51 @@ if (!Yii::$app->user->isGuest) {
         echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-center'],
         'items' => [
-            //['label' => 'Inicio', 'url' => ['/site/index']],                                    
-            [
-                'label' => 'Administracion',
-                'items' => [
-                    ['label' => 'Cliente', 'url' => ['/cliente/index']],                    
-                ]
-            ],
-            /*[                
-                'label' => 'Configuración',
-                'items' => [
-                    ['label' => 'Usuarios', 'url' => ['/site/usuarios']],                    
-                ],                
-            ]*/
+        ['label' => 'Inicio', 'url' => ['/site/index']],
+        [
+            'label' => 'Administración',
+            'items' => [
+                ['label' => 'Clientes', 'url' => ['/cliente/index']],
+                ['label' => 'Sedes', 'url' => ['/sede/index']],
+                ['label' => 'Otros', 'url' => ['/site/index']],
+            ]
+        ],
+        [
+            'label' => 'Procesos',
+            'items' => [
+                /*['label' => 'Matriculas', 'url' => ['/matriculas/index']],                    
+                ['label' => 'Otros', 'url' => ['/site/index']],*/
+            ]
+        ],
+        [
+            'label' => 'Utilidades',
+            'items' => [                    
+                //['label' => 'Consulta Niveles', 'url' => ['/site/index']],
+            ]
+        ],
+        [
+            'label' => 'Movimientos',
+            'items' => [
+                /*['label' => 'Otros Pagos', 'url' => ['/pagosotros/index']],
+                ['label' => 'Pagos Mensualidad', 'url' => ['/pagos/index']],
+                ['label' => 'Pagos Periodo', 'url' => ['/pagosperiodo/index']],
+                ['label' => 'HabeasData', 'url' => ['/habeasdata/index']],
+                ['label' => 'Notas', 'url' => ['/notas/notas']],*/
+            ]
+        ],                        
         ],
         ]);
-    }           
+    }
+        
+    
 
 }
     
 echo Nav::widget([
     'options' => ['class' => 'navbar-nav navbar-right'],
     'items' => [
+
+
         Yii::$app->user->isGuest ? (
                 ['label' => 'Iniciar Sesión', 'url' => ['/site/login']]
                 ) : (

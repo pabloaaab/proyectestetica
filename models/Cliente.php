@@ -30,6 +30,19 @@ class Cliente extends \yii\db\ActiveRecord
     {
         return 'cliente';
     }
+    
+    public function beforeSave($insert) {
+	if(!parent::beforeSave($insert)){
+            return false;
+        }
+	# ToDo: Cambiar a cliente cargada de configuración.    
+	$this->nombre1 = strtoupper($this->nombre1);
+        $this->nombre2 = strtoupper($this->nombre2);
+	$this->apellido1 = strtoupper($this->apellido1);
+        $this->apellido2 = strtoupper($this->apellido2);
+        $this->direccion = strtoupper($this->direccion);
+        return true;
+    }
 
     /**
      * {@inheritdoc}
@@ -37,13 +50,12 @@ class Cliente extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [[ 'nombre1', 'nombre2', 'apellido1', 'apellido2', 'telefono', 'celular', 'direccion', 'email'], 'required'],
-            [['sede_fk','identificacion'], 'integer'],
-            [['identificacion'], 'string', 'max' => 22],
+            [['nombre1', 'nombre2', 'apellido1', 'apellido2', 'telefono', 'celular', 'direccion', 'email'], 'required'],
+            [['sede_fk','identificacion','cliente_pk'], 'integer'],
+            ['identificacion', 'identificacion_existe'],
             [['nombre1', 'nombre2', 'apellido1', 'apellido2', 'telefono', 'celular'], 'string', 'max' => 15],
             [['direccion'], 'string', 'max' => 200],
-            [['email'], 'safe', 'max' => 40],
-            [['identificacion'], 'unique'],
+            [['email'], 'email'],                        
             [['sede_fk'], 'exist', 'skipOnError' => true, 'targetClass' => Sedes::className(), 'targetAttribute' => ['sede_fk' => 'sede_pk']],
         ];
     }
@@ -67,6 +79,17 @@ class Cliente extends \yii\db\ActiveRecord
             'sede_fk' => 'Sede Fk',
         ];
     }
+    
+    public function identificacion_existe($attribute, $params)
+    {
+        //Buscar la identificacion en la tabla
+        $table = Cliente::find()->where("identificacion=:identificacion", [":identificacion" => $this->identificacion])->andWhere("cliente_pk!=:cliente_pk", [':cliente_pk' => $this->cliente_pk]);
+        //Si la identificacion existe mostrar el error
+        if ($table->count() == 1)
+        {
+            $this->addError($attribute, "El número de identificación ya existe".$this->identificacion);
+        }
+    }
 
     /**
      * @return \yii\db\ActiveQuery
@@ -75,4 +98,7 @@ class Cliente extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Sedes::className(), ['sede_pk' => 'sede_fk']);
     }
+    
+    
+        
 }

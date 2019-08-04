@@ -113,3 +113,33 @@ a.desc:after {
 .nav > li > form > button.logout:focus {
     outline: none;
 }
+
+.panel-filters {
+  color: white;
+  background-color: #cc99cc;
+  border-color: #cc99cc;
+}
+
+.alert-info {
+  color: white;
+  background-color: #cc99cc;
+  border-color: #cc99cc;
+}
+
+.btn-primary {
+  color: white;
+  background-color: #cc99cc;
+  border-color: #cc99cc;
+}
+
+.btn-primary,
+.btn-primary:hover,
+.btn-primary:active {
+  color: white;
+  background-color: #cc99cc;
+  border-color: #cc99cc;
+}
+
+
+
+

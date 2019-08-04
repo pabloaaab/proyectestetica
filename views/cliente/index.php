@@ -26,8 +26,8 @@ $this->title = 'Clientes';
 
 ]);
 ?>
-<div class="panel panel-primary panel-filters">
-    <div class="panel-heading">
+<div class="panel panel-default panel-filters">
+    <div class="panel-heading panel-x">
         Filtros de busqueda <i class="glyphicon glyphicon-filter"></i>
     </div>
 	
@@ -52,7 +52,7 @@ $this->title = 'Clientes';
 <?php $f->end() ?>
 
     <div class = "form-group" align="right">
-        <a align="right" href="<?= Url::toRoute("cliente/nuevo") ?>" class="btn btn-primary">Nuevo Inscrito</a>
+        <a align="right" href="<?= Url::toRoute("cliente/nuevo") ?>" class="btn btn-primary">Nuevo Cliente</a>
     </div>    
     <div class="alert alert-info">Registros: <?= $pagination->totalCount ?></div>
     <div class="table-condensed">
@@ -86,7 +86,7 @@ $this->title = 'Clientes';
                 <td><?= $val->celular ?></td>
                 <td><?= $val->email ?></td>
                 <td><?= $val->direccion ?></td>
-                <td><?= $val->sede_fk ?></td>                
+                <td><?= $val->sedeFk->sede ?></td>                
                 <td><a href="<?= Url::toRoute(["cliente/editar", "cliente_pk" => $val->cliente_pk]) ?>" ><img src="svg/si-glyph-document-edit.svg" align="center" width="20px" height="20px" title="Editar"></a></td>                   
             </tr>
             </tbody>
@@ -94,10 +94,10 @@ $this->title = 'Clientes';
         </table>
 
         <div class = "form-group" align="right">
-            <a href="<?= Url::toRoute("cliente/nuevo") ?>" class="btn btn-primary">Nuevo Cliente</a>
+            <a align="right" href="<?= Url::toRoute("cliente/nuevo") ?>" class="btn btn-primary">Nuevo Cliente</a>
         </div>
         <div class = "form-group" align="left">
-            <?= LinkPager::widget(['pagination' => $pagination]) ?>
+            <?= LinkPager::widget(['pagination' => $pagination] ); ?>                      
         </div>
     </div>
 

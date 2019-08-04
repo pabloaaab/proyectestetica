@@ -2,12 +2,17 @@
 
 /* @var $this yii\web\View */
 
-$this->title = 'Metis';
+$this->title = 'Beautyice';
 ?>
 <div class="site-index">
 
-    <div class="jumbotron">        
-        <h1>Metis!</h1>
+    <div class="jumbotron">
+        <img src="images/logo.png" align="center" width="255px" height="330px">
+        <h1>Bienvenidos!</h1>
+
+        <p class="lead">Beautyice.</p>
+
+
     </div>
 
     <div class="body-content">

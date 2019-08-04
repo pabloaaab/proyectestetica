@@ -92,7 +92,7 @@ use yii\web\UploadedFile;
 
         public function actionNuevo()
         {
-            $model = new FormInscrito;
+            $model = new FormCliente;
             $msg = null;
             $tipomsg = null;
             if ($model->load(Yii::$app->request->post()) && Yii::$app->request->isAjax) {
@@ -104,78 +104,26 @@ use yii\web\UploadedFile;
                     $table = new Cliente;
                     $table->identificacion = $model->identificacion;
                     $table->nombre1 = $model->nombre1;
-                    $table->nombre2 = $model->nombre2;
-                    $table->tipo_doc = $model->tipo_doc;
+                    $table->nombre2 = $model->nombre2;                    
                     $table->apellido1 = $model->apellido1;
-                    $table->apellido2 = $model->apellido2;
-                    $table->nom_madre = $model->nom_madre;
-                    $table->nom_padre = $model->nom_padre;
-                    $table->doc_madre = $model->doc_madre;
-                    $table->doc_padre = $model->doc_padre;
-                    $table->ocupacion_madre = $model->ocupacion_madre;
-                    $table->ocupacion_padre = $model->ocupacion_padre;
-                    $table->tipo_personal = $model->tipo_personal;
-                    $table->lugar_exp = $model->lugar_exp;
+                    $table->apellido2 = $model->apellido2;                    
                     $table->telefono = $model->telefono;
                     $table->celular = $model->celular;
                     $table->email = $model->email;
-                    $table->direccion = $model->direccion;
-                    $table->sexo = $model->sexo;
-                    $table->comuna = $model->comuna;
-                    $table->barrio = $model->barrio;
-                    $table->fecha_nac = $model->fecha_nac;
-                    $table->municipio_nac = $model->municipio_nac;
-                    $table->departamento_nac = $model->departamento_nac;
-                    $table->municipio = $model->municipio;
-                    $table->estudio1 = $model->estudio1;
-                    $table->estudio2 = $model->estudio2;
-                    $table->gradoc1 = $model->gradoc1;
-                    $table->gradoc2 = $model->gradoc2;
-                    $table->anioc1 = $model->anioc1;
-                    $table->anioc2 = $model->anioc2;
-                    $table->graduado1 = $model->graduado1;
-                    $table->graduado2 = $model->graduado2;
-                    $table->autoriza = $model->autoriza;
-                    $table->fecha_autoriza = $model->fecha_autoriza;
-                    $table->ciudad_firma = $model->ciudad_firma;
+                    $table->direccion = $model->direccion;                                        
+                    $table->sede_fk = $model->sede_fk;
                     if ($table->insert()) {
                         $msg = "Registros guardados correctamente";
                         $model->identificacion = null;
                         $model->nombre1 = null;
-                        $model->nombre2 = null;
-                        $model->tipo_doc = null;
+                        $model->nombre2 = null;                       
                         $model->apellido1 = null;
-                        $model->apellido2 = null;
-                        $model->nom_madre = null;
-                        $model->nom_padre = null;
-                        $model->doc_madre = null;
-                        $model->doc_padre = null;
-                        $model->ocupacion_madre = null;
-                        $model->ocupacion_padre = null;
-                        $model->tipo_personal = null;
-                        $model->lugar_exp = null;
+                        $model->apellido2 = null;                        
                         $model->telefono = null;
                         $model->celular = null;
                         $model->email = null;
-                        $model->direccion = null;
-                        $model->sexo = null;
-                        $model->comuna = null;
-                        $model->barrio = null;
-                        $model->fecha_nac = null;
-                        $model->municipio_nac = null;
-                        $model->departamento_nac = null;
-                        $model->municipio = null;
-                        $model->estudio1 = null;
-                        $model->estudio2 = null;
-                        $model->gradoc1 = null;
-                        $model->gradoc2 = null;
-                        $model->anioc1 = null;
-                        $model->anioc2 = null;
-                        $model->graduado1 = null;
-                        $model->graduado2 = null;
-                        $model->autoriza = null;
-                        $model->fecha_autoriza = null;
-                        $model->ciudad_firma = null;
+                        $model->direccion = null;                        
+                        $model->sede_fk = null;
                     } else {
                         $msg = "error";
                     }
@@ -189,7 +137,7 @@ use yii\web\UploadedFile;
 
         public function actionEditar()
         {
-            $model = new FormInscrito;
+            $model = new FormCliente();
             $msg = null;
             $tipomsg = null;
             if ($model->load(Yii::$app->request->post()) && Yii::$app->request->isAjax) {
@@ -202,40 +150,14 @@ use yii\web\UploadedFile;
                     if ($table) {
                         $table->identificacion = $model->identificacion;
                         $table->nombre1 = $model->nombre1;
-                        $table->nombre2 = $model->nombre2;
-                        $table->tipo_doc = $model->tipo_doc;
+                        $table->nombre2 = $model->nombre2;                        
                         $table->apellido1 = $model->apellido1;
-                        $table->apellido2 = $model->apellido2;
-                        $table->nom_madre = $model->nom_madre;
-                        $table->nom_padre = $model->nom_padre;
-                        $table->doc_madre = $model->doc_madre;
-                        $table->doc_padre = $model->doc_padre;
-                        $table->ocupacion_madre = $model->ocupacion_madre;
-                        $table->ocupacion_padre = $model->ocupacion_padre;
-                        $table->tipo_personal = $model->tipo_personal;
-                        $table->lugar_exp = $model->lugar_exp;
+                        $table->apellido2 = $model->apellido2;                        
                         $table->telefono = $model->telefono;
                         $table->celular = $model->celular;
                         $table->email = $model->email;
-                        $table->direccion = $model->direccion;
-                        $table->sexo = $model->sexo;
-                        $table->comuna = $model->comuna;
-                        $table->barrio = $model->barrio;
-                        $table->fecha_nac = $model->fecha_nac;
-                        $table->municipio_nac = $model->municipio_nac;
-                        $table->departamento_nac = $model->departamento_nac;
-                        $table->municipio = $model->municipio;
-                        $table->estudio1 = $model->estudio1;
-                        $table->estudio2 = $model->estudio2;
-                        $table->gradoc1 = $model->gradoc1;
-                        $table->gradoc2 = $model->gradoc2;
-                        $table->anioc1 = $model->anioc1;
-                        $table->anioc2 = $model->anioc2;
-                        $table->graduado1 = $model->graduado1;
-                        $table->graduado2 = $model->graduado2;
-                        $table->autoriza = $model->autoriza;
-                        $table->fecha_autoriza = $model->fecha_autoriza;
-                        $table->ciudad_firma = $model->ciudad_firma;
+                        $table->direccion = $model->direccion;                        
+                        $table->sede_fk = $model->sede_fk;                        
                         if ($table->update()) {
                             $msg = "El registro ha sido actualizado correctamente";
                         } else {
@@ -250,8 +172,6 @@ use yii\web\UploadedFile;
                     $model->getErrors();
                 }
             }
-
-
             if (Yii::$app->request->get("cliente_pk")) {
                 $cliente_pk = Html::encode($_GET["cliente_pk"]);
                 $table = Cliente::find()->where(['cliente_pk' => $cliente_pk])->one();
@@ -259,45 +179,19 @@ use yii\web\UploadedFile;
                     $model->cliente_pk = $table->cliente_pk;
                     $model->identificacion = $table->identificacion;
                     $model->nombre1 = $table->nombre1;
-                    $model->nombre2 = $table->nombre2;
-                    $model->tipo_doc = $table->tipo_doc;
+                    $model->nombre2 = $table->nombre2;                    
                     $model->apellido1 = $table->apellido1;
-                    $model->apellido2 = $table->apellido2;
-                    $model->nom_madre = $table->nom_madre;
-                    $model->nom_padre = $table->nom_padre;
-                    $model->doc_madre = $table->doc_madre;
-                    $model->doc_padre = $table->doc_padre;
-                    $model->ocupacion_madre = $table->ocupacion_madre;
-                    $model->ocupacion_padre = $table->ocupacion_padre;
-                    $model->tipo_personal = $table->tipo_personal;
-                    $model->lugar_exp = $table->lugar_exp;
+                    $model->apellido2 = $table->apellido2;                    
                     $model->telefono = $table->telefono;
                     $model->celular = $table->celular;
                     $model->email = $table->email;
-                    $model->direccion = $table->direccion;
-                    $model->sexo = $table->sexo;
-                    $model->comuna = $table->comuna;
-                    $model->barrio = $table->barrio;
-                    $model->fecha_nac = $table->fecha_nac;
-                    $model->municipio_nac = $table->municipio_nac;
-                    $model->departamento_nac = $table->departamento_nac;
-                    $model->municipio = $table->municipio;
-                    $model->estudio1 = $table->estudio1;
-                    $model->estudio2 = $table->estudio2;
-                    $model->gradoc1 = $table->gradoc1;
-                    $model->gradoc2 = $table->gradoc2;
-                    $model->anioc1 = $table->anioc1;
-                    $model->anioc2 = $table->anioc2;
-                    $model->graduado1 = $table->graduado1;
-                    $model->graduado2 = $table->graduado2;
-                    $model->autoriza = $table->autoriza;
-                    $model->fecha_autoriza = $table->fecha_autoriza;
-                    $model->ciudad_firma = $table->ciudad_firma;
+                    $model->direccion = $table->direccion;                    
+                    $model->sede_fk = $table->sede_fk;
                 } else {
-                    return $this->redirect(["inscritos/index"]);
+                    return $this->redirect(["cliente/index"]);
                 }
             } else {
-                return $this->redirect(["inscritos/index"]);
+                return $this->redirect(["cliente/index"]);
             }
             return $this->render("editar", ["model" => $model, "msg" => $msg, "tipomsg" => $tipomsg]);
         }                               

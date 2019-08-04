@@ -27,14 +27,12 @@ class FormCliente extends Model
     public function rules()
     {                    
         return [
-            [[ 'nombre1', 'nombre2', 'apellido1', 'apellido2', 'telefono', 'celular', 'direccion', 'email'], 'required'],
-            [['sede_fk','identificacion'], 'integer'],
-            [['identificacion'], 'string', 'max' => 22],
-            [['nombre1', 'nombre2', 'apellido1', 'apellido2', 'telefono', 'celular'], 'string', 'max' => 15],
-            [['direccion'], 'string', 'max' => 200],
-            [['email'], 'email', 'max' => 40],
-            ['email', 'email_existe'],    
-            [['identificacion'], 'unique'],
+            [['nombre1', 'nombre2', 'apellido1', 'apellido2', 'telefono', 'celular', 'direccion', 'email'], 'required'],            
+            [['sede_fk','identificacion','cliente_pk'], 'integer'], 
+            ['identificacion', 'identificacion_existe'],
+            [['nombre1', 'nombre2', 'apellido1', 'apellido2', 'telefono', 'celular'], 'string'],
+            [['direccion'], 'string'],
+            [['email'], 'email'],            
             [['sede_fk'], 'exist', 'skipOnError' => true, 'targetClass' => Sedes::className(), 'targetAttribute' => ['sede_fk' => 'sede_pk']],
         ];
             
@@ -43,7 +41,7 @@ class FormCliente extends Model
     public function attributeLabels()
     {
         return [
-            'cliente_pk' => 'Cliente Pk',
+            'cliente_pk' => '',
             'identificacion' => 'Identificacion',
             'nombre1' => 'Nombre1',
             'nombre2' => 'Nombre2',
@@ -53,19 +51,19 @@ class FormCliente extends Model
             'celular' => 'Celular',
             'direccion' => 'Direccion',
             'email' => 'Email',
-            'sede_fk' => 'Sede Fk',
+            'sede_fk' => 'Sede',
         ];
     }
 
-    
-    public function email_existe($attribute, $params)
+    public function identificacion_existe($attribute, $params)
     {
-        //Buscar el email en la tabla
-        $table = Cliente::find()->where("email=:email", [":email" => $this->email])->andWhere("consecutivo!=:consecutivo", [':consecutivo' => $this->consecutivo]);
-        //Si el email existe mostrar el error
+        //Buscar la identificacion en la tabla
+        $table = Cliente::find()->where("identificacion=:identificacion", [":identificacion" => $this->identificacion])->andWhere("cliente_pk!=:cliente_pk", [':cliente_pk' => $this->cliente_pk]);
+        //Si la identificacion existe mostrar el error
         if ($table->count() == 1)
         {
-            $this->addError($attribute, "El email ya existe".$this->consecutivo);
+            $this->addError($attribute, "El número de identificación ya existe".$this->identificacion);
         }
-    }        
+    }
+                
 }
