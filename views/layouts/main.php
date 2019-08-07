@@ -48,33 +48,30 @@ if (!Yii::$app->user->isGuest) {
                 'items' => [
                     ['label' => 'Clientes', 'url' => ['/cliente/index']],
                     ['label' => 'Sedes', 'url' => ['/sede/index']],
+                    ['label' => 'Seccion Tipo', 'url' => ['/secciontipo/index']],
                     ['label' => 'Otros', 'url' => ['/site/index']],
                 ]
             ],
             [
                 'label' => 'Procesos',
-                'items' => [
-                    //['label' => 'Matriculas', 'url' => ['/matriculas/index']],
-                    //['label' => 'Periodos Generados', 'url' => ['/periodos/index']],
-                    //['label' => 'Otros', 'url' => ['/site/index']],
+                'items' => [                    
+                    ['label' => 'Otros', 'url' => ['/site/index']],
                 ]
             ],
             [
                 'label' => 'Utilidades',
                 'items' => [
-                    //['label' => 'Informe Pagos', 'url' => ['/informepagos/index']],
-                    //['label' => 'Consulta Niveles', 'url' => ['/matriculas/niveles']],
-                    //['label' => 'Generar Acceso Estudiantes', 'url' => ['/site/generaracceso']],
+                    ['label' => 'Informe Pagos', 'url' => ['/site/index']],                    
                 ]
             ],
             [
                 'label' => 'Movimientos',
-                'items' => [
-                    /*['label' => 'Otros Pagos', 'url' => ['/pagosotros/index']],
-                    ['label' => 'Pagos Mensualidad', 'url' => ['/pagos/index']],
-                    ['label' => 'Pagos Periodo', 'url' => ['/pagosperiodo/index']],
+                'items' => [                                        
+                    ['label' => 'Citas', 'url' => ['/cita/index']],
+                    ['label' => 'Agenda', 'url' => ['/agenda/notas']],
+                    ['label' => 'Historia', 'url' => ['/historia/notas']],
+                    ['label' => 'Protocolos', 'url' => ['/protocolo/index']],
                     ['label' => 'HabeasData', 'url' => ['/habeasdata/index']],
-                    ['label' => 'Notas', 'url' => ['/notas/notas']],*/
                 ]
             ],            
             [                
@@ -97,30 +94,30 @@ if (!Yii::$app->user->isGuest) {
             'items' => [
                 ['label' => 'Clientes', 'url' => ['/cliente/index']],
                 ['label' => 'Sedes', 'url' => ['/sede/index']],
+                ['label' => 'Seccion Tipo', 'url' => ['/secciontipo/index']],
                 ['label' => 'Otros', 'url' => ['/site/index']],
             ]
         ],
         [
-            'label' => 'Procesos',
-            'items' => [
-                /*['label' => 'Matriculas', 'url' => ['/matriculas/index']],                    
-                ['label' => 'Otros', 'url' => ['/site/index']],*/
-            ]
+                'label' => 'Procesos',
+                'items' => [                    
+                    ['label' => 'Otros', 'url' => ['/site/index']],
+                ]
         ],
         [
             'label' => 'Utilidades',
-            'items' => [                    
-                //['label' => 'Consulta Niveles', 'url' => ['/site/index']],
+            'items' => [
+                ['label' => 'Informe Pagos', 'url' => ['/site/index']],                    
             ]
         ],
         [
             'label' => 'Movimientos',
-            'items' => [
-                /*['label' => 'Otros Pagos', 'url' => ['/pagosotros/index']],
-                ['label' => 'Pagos Mensualidad', 'url' => ['/pagos/index']],
-                ['label' => 'Pagos Periodo', 'url' => ['/pagosperiodo/index']],
+            'items' => [                                        
+                ['label' => 'Citas', 'url' => ['/cita/index']],
+                ['label' => 'Agenda', 'url' => ['/agenda/notas']],
+                ['label' => 'Historia', 'url' => ['/historia/notas']],
+                ['label' => 'Protocolos', 'url' => ['/protocolo/index']],
                 ['label' => 'HabeasData', 'url' => ['/habeasdata/index']],
-                ['label' => 'Notas', 'url' => ['/notas/notas']],*/
             ]
         ],                        
         ],
