@@ -4,10 +4,10 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\LinkPager;
 
-$this->title = 'Subir Firma Estudiante';
+$this->title = 'Subir Firma Cliente';
 ?>
 
-<h1>Subir Firma Estudiante</h1>
+<h1>Subir Firma Cliente</h1>
 <h3 class="alert-danger"><?= $msg ?></h3>
 <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]) ?>
 <?= $form->field($model, 'consecutivo')->input("hidden") ?>

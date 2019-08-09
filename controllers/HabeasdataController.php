@@ -19,7 +19,7 @@ use app\models\FormHabeasdata;
 use yii\helpers\Url;
 use app\models\FormFiltroHabeasdata;
 use yii\web\UploadedFile;
-use app\models\FormFirmaEstudiante;
+use app\models\FormFirmaCliente;
 
     class HabeasdataController extends Controller
     {
@@ -166,9 +166,9 @@ use app\models\FormFirmaEstudiante;
             return $this->render("editar", ["model" => $model, "msg" => $msg, "tipomsg" => $tipomsg]);
         }
 
-        public function actionFirma_estudiante()
+        public function actionFirma_cliente()
         {
-            $model = new FormFirmaEstudiante();
+            $model = new FormFirmaCliente();
             $msg = null;
             $id = Html::encode($_GET["id"]);
 
@@ -187,7 +187,7 @@ use app\models\FormFirmaEstudiante;
                 }
             }
             
-            return $this->render("firmaEstudiante", ["model" => $model, "msg" => $msg]);
+            return $this->render("firmaCliente", ["model" => $model, "msg" => $msg]);
         }
               
         public function actionImprimir($id) {

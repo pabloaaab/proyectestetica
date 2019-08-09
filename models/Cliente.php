@@ -97,8 +97,6 @@ class Cliente extends \yii\db\ActiveRecord
     public function getSedeFk()
     {
         return $this->hasOne(Sedes::className(), ['sede_pk' => 'sede_fk']);
-    }
-    
-    
+    }        
         
 }

@@ -3,7 +3,7 @@
 use inquid\pdf\FPDF;
 use app\models\Habeasdata;
 use app\models\FormatoAutorizacion;
-use app\models\Inscritos;
+use app\models\Cliente;
 
 class PDF extends FPDF {
 
@@ -14,7 +14,7 @@ class PDF extends FPDF {
 	  $this->Ln(8);
     }
     
-    function Body($pdf,$model,$formato,$nombreinscrito) {
+    function Body($pdf,$model,$formato,$nombrecliente) {
         //contenido        
 	$pdf->SetXY(10,50);
 	$pdf->SetFont('Arial','B',10);	
@@ -31,13 +31,13 @@ class PDF extends FPDF {
 	$pdf->SetXY(10, 200);
 	$pdf->Cell(10, 5, "___________________________________", 0, 0, 'J');	
 	$pdf->SetXY(10, 210); //paciente
-	$pdf->Cell(10, 5, utf8_decode('Nombre: '.$nombreinscrito->nombreestudiante2), 0, 0, 'J');
+	$pdf->Cell(10, 5, utf8_decode('Nombre: '.$nombrecliente->nombre1.' '.$nombrecliente->nombre2.' '.$nombrecliente->apellido1.' '.$nombrecliente->apellido2), 0, 0, 'J');
 	$pdf->SetXY(10, 220); //identificacion
 	$pdf->Cell(10, 5, utf8_decode('Identificacion: '.$model->identificacion), 0, 0, 'J');
 	$pdf->SetXY(10, 230); //fecha
 	$pdf->Cell(10, 5, utf8_decode('Fecha Autorizacion: '.$model->fechaautorizacion), 0, 0, 'J');
 	
-	$rutafirma = "firmaEstudiante/".$model->firma; //ruta firma estudiante	
+	$rutafirma = "firmaCliente/".$model->firma; //ruta firma cliente	
 	$pdf->Image($rutafirma,15, 185, 50, 15);
     }
 
@@ -47,11 +47,11 @@ class PDF extends FPDF {
     } 
 	
 } 
-$nombreinscrito = Inscritos::find()->where(['=','identificacion',$model->identificacion])->one();
+$nombrecliente = Cliente::find()->where(['=','identificacion',$model->identificacion])->one();
 $pdf = new PDF();
 $pdf->AliasNbPages();
 $pdf->AddPage();
-$pdf->Body($pdf,$model,$formato,$nombreinscrito);
+$pdf->Body($pdf,$model,$formato,$nombrecliente);
 $pdf->AliasNbPages();
 $pdf->SetFont('Arial', '', 10);
 $pdf->Output("Habeasdata.pdf", 'D');

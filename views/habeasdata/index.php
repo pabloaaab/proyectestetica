@@ -74,7 +74,7 @@ $this->title = 'Habeasdata';
                 <td><?= $autoriza ?></td>
                 <td><?= $firma ?></td>                                                
                 <td><a href="<?= Url::toRoute(["habeasdata/editar", "id" => $val->id]) ?>" ><img src="svg/si-glyph-document-edit.svg" align="center" width="20px" height="20px" title="Editar"></a></td>
-                <td><a href="<?= Url::toRoute(["habeasdata/firma_estudiante", "id" => $val->id]) ?>" ><img src="svg/si-glyph-pencil.svg" align="center" width="20px" height="20px" title="Firma Estudiante"></a></td>                
+                <td><a href="<?= Url::toRoute(["habeasdata/firma_cliente", "id" => $val->id]) ?>" ><img src="svg/si-glyph-pencil.svg" align="center" width="20px" height="20px" title="Firma Cliente"></a></td>                
                 <?php if ($val->autorizacion == 1 && $val->firma != "") { ?>
                 <td><a href="<?= Url::toRoute(["habeasdata/imprimir", "id" => $val->id]) ?>"><img src="svg/si-glyph-print.svg" align="center" width="20px" height="20px" title="Imprimir"></a></td>
                 <?php } else { ?>
