@@ -111,4 +111,14 @@ class Eventos extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Profesionales::className(), ['id_profesional' => 'id_profesional']);
     }
+    
+    public function getcancelo()
+    {
+        if($this->cancelo_no_asistio == 1){
+            $cancelo = "SI";
+        }else{
+            $cancelo = "NO";
+        }
+        return $cancelo;
+    }
 }

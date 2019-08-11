@@ -68,8 +68,8 @@ if (!Yii::$app->user->isGuest) {
                 'label' => 'Movimientos',
                 'items' => [                                        
                     ['label' => 'Citas', 'url' => ['/evento/index']],
-                    ['label' => 'Agenda', 'url' => ['/agenda/notas']],
-                    ['label' => 'Historia', 'url' => ['/historia/notas']],
+                    ['label' => 'Agenda', 'url' => ['/agenda/index']],
+                    ['label' => 'Historia', 'url' => ['/historia/index']],
                     ['label' => 'Protocolos', 'url' => ['/protocolo/index']],
                     ['label' => 'HabeasData', 'url' => ['/habeasdata/index']],
                 ]

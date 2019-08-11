@@ -15,6 +15,7 @@ class FormFiltroEvento extends Model
     public $fecha;
     public $maquina;
     public $sede_fk;
+    public $anio_mes_dia;
 
     public function rules()
     {
@@ -24,6 +25,7 @@ class FormFiltroEvento extends Model
             ['fecha', 'default'],
             ['maquina', 'default'],
             ['sede_fk', 'default'],
+            ['anio_mes_dia', 'default'],
         ];
     }
 
@@ -35,6 +37,7 @@ class FormFiltroEvento extends Model
             'fecha' => 'Fecha:',
             'maquina' => 'Maquina:',
             'sede_fk' => 'Sede:',
+            'anio_mes_dia' => 'Fecha Año-Mes-Día:',
         ];
     }
 }

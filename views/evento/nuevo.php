@@ -4,11 +4,16 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
+use kartik\date\DatePicker;
+use kartik\select2\Select2;
+use yii\bootstrap\Modal;
+use yii\data\Pagination;
+use kartik\depdrop\DepDrop;
 
-$this->title = 'Nuevo Cliente';
+$this->title = 'Nueva Cita';
 ?>
 
-<h1>Nuevo Cliente</h1>
+<h1>Nueva Cita</h1>
 <?php if ($tipomsg == "danger") { ?>
     <h3 class="alert-danger"><?= $msg ?></h3>
 <?php } else{ ?>
@@ -25,29 +30,42 @@ $this->title = 'Nuevo Cliente';
 
 <?php
 $sede = ArrayHelper::map(\app\models\Sedes::find()->where(['=','estado',0])->all(), 'sede_pk','sede');
+$maquina = ArrayHelper::map(\app\models\Maquina::find()->where(['<>','id_maquina',0])->all(), 'id_maquina','maquina');
+$profesional = ArrayHelper::map(\app\models\Profesionales::find()->where(['=','estado',0])->all(), 'id_profesional','nombre');
+$cliente = ArrayHelper::map(\app\models\Cliente::find()->all(), 'identificacion','nombrecompleto');
 ?>
 
-<h3>Información Personal</h3>
 <div class="row" id="personal">
-    <div class="col-lg-3">
-        <?= $form->field($model, 'cliente_pk')->input("hidden") ?>
-        <?= $form->field($model, 'identificacion')->input("text") ?>
-        <?= $form->field($model, 'nombre1')->input("text") ?>
-        <?= $form->field($model, 'nombre2')->input("text") ?>
-        <?= $form->field($model, 'apellido1')->input("text") ?>        
-        <?= $form->field($model, 'apellido2')->input("text") ?>
-        <?= $form->field($model, 'telefono')->input("text") ?>
-        <?= $form->field($model, 'email')->input("text") ?>
-        <?= $form->field($model, 'celular')->input("text") ?>
-        <?= $form->field($model, 'direccion')->input("text") ?>                
+    <div class="col-lg-4">
+        <?= $form->field($model, 'id')->input("hidden") ?>
+        <?= $form->field($model, 'asunto')->input("text") ?>
+        <?= $form->field($model, 'identificacion')->widget(Select2::classname(), [
+            'data' => $cliente,
+            'options' => ['placeholder' => 'Seleccione un paciente'],
+            'pluginOptions' => [
+                'allowClear' => true
+            ],
+        ]); ?>               
         <?= $form->field($model, 'sede_fk')->dropDownList($sede,['prompt' => 'Seleccione...' ]) ?>
+        <?= $form->field($model, 'maquina')->dropDownList($maquina,['prompt' => 'Seleccione...' ]) ?>
+        <?= $form->field($model,'fechai')->widget(DatePicker::className(),['name' => 'check_issue_date',
+                'value' => date('d-m-Y', strtotime('+2 days')),
+                'options' => ['placeholder' => 'Seleccione una fecha ...'],
+                'pluginOptions' => [
+                    'format' => 'yyyy-mm-dd',
+                    'todayHighlight' => true]]) ?>
+        <?= $form->field($model, 'horai')->input("time") ?>                
+        <?= $form->field($model, 'id_profesional')->dropDownList($profesional,['prompt' => 'Seleccione...' ]) ?>
+        <?= $form->field($model, 'telefono')->input("text") ?>
+        <?= $form->field($model, 'observaciones')->input("text") ?>                        
+        
     </div>    
 </div>
 
 <div class="row">
     <div class="col-lg-4">
         <?= Html::submitButton("Guardar", ["class" => "btn btn-primary"])?>
-        <a href="<?= Url::toRoute("cliente/index") ?>" class="btn btn-primary">Regresar</a>
+        <a href="<?= Url::toRoute("evento/index") ?>" class="btn btn-primary">Regresar</a>
     </div>
 </div>
 

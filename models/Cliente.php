@@ -97,6 +97,15 @@ class Cliente extends \yii\db\ActiveRecord
     public function getSedeFk()
     {
         return $this->hasOne(Sedes::className(), ['sede_pk' => 'sede_fk']);
+    }
+    
+    public function getNombrecompleto()
+    {
+        return $this->identificacion.' - '.$this->nombre1.' '.$this->nombre2.' '.$this->apellido1.' '.$this->apellido2;
     }        
-        
+    
+    public function getNombrecompletosinidentificacion()
+    {
+        return $this->nombre1.' '.$this->nombre2.' '.$this->apellido1.' '.$this->apellido2;
+    }
 }

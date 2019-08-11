@@ -33,20 +33,31 @@ use yii\web\UploadedFile;
                 $cliente = null;                
                 $maquina = null;
                 $sede = null;
+                $anio_mes_dia = null;
                 if ($form->load(Yii::$app->request->get())) {
                     if ($form->validate()) {
                         $fecha = Html::encode($form->fecha);
                         $identificación = Html::encode($form->identificacion);
                         $cliente = Html::encode($form->cliente);
                         $maquina = Html::encode($form->maquina);
-                        $sede = Html::encode($form->sede);                        
+                        $sede = Html::encode($form->sede_fk);
+                        $anio_mes_dia = Html::encode($form->anio_mes_dia);
+                        if ($anio_mes_dia == "dia"){
+                            $fecha = $fecha;
+                        }
+                        if ($anio_mes_dia == "mes"){
+                            $fecha = date('Y-m', strtotime($fecha));
+                        }
+                        if ($anio_mes_dia == "anio"){
+                            $fecha = date('Y', strtotime($fecha));
+                        }
                         $table = Eventos::find()
-                            ->andFilterWhere(['=', 'fechai', $email])
+                            ->andFilterWhere(['like', 'fechai', $fecha])
                             ->andFilterWhere(['=', 'identificacion', $identificación])
-                            ->andFilterWhere(['like', 'nombres', $nombre1])
-                            ->andFilterWhere(['like', 'maquina', $nombre2])
-                            ->andFilterWhere(['like', 'sede_fk', $apellido1])   
-                            ->orderBy('cliente_pk desc');
+                            ->andFilterWhere(['like', 'nombres', $cliente])
+                            ->andFilterWhere(['like', 'maquina', $maquina])
+                            ->andFilterWhere(['like', 'sede_fk', $sede])   
+                            ->orderBy('fechai desc');
                         $count = clone $table;
                         $pages = new Pagination([
                             'pageSize' => 20,
@@ -61,7 +72,7 @@ use yii\web\UploadedFile;
                     }
                 } else {
                     $table = Eventos::find()
-                        ->orderBy('id desc');
+                        ->orderBy('fechai desc');
                     $count = clone $table;
                     $pages = new Pagination([
                         'pageSize' => 20,
@@ -86,38 +97,43 @@ use yii\web\UploadedFile;
 
         public function actionNuevo()
         {
-            $model = new FormCliente;
+            $model = new FormEvento();
             $msg = null;
             $tipomsg = null;
             if ($model->load(Yii::$app->request->post()) && Yii::$app->request->isAjax) {
-                Yii::$app->response->format = Response::FORMAT_JSON;
+                Yii::$app->response->format = Response::FORMAT_JSON;                
                 return ActiveForm::validate($model);
             }
             if ($model->load(Yii::$app->request->post())) {
                 if ($model->validate()) {
-                    $table = new Cliente;
+                    $table = new Eventos();
                     $table->identificacion = $model->identificacion;
-                    $table->nombre1 = $model->nombre1;
-                    $table->nombre2 = $model->nombre2;                    
-                    $table->apellido1 = $model->apellido1;
-                    $table->apellido2 = $model->apellido2;                    
+                    $cliente = \app\models\Cliente::find()->where(['=','identificacion',$model->identificacion])->one();
+                    $table->nombres = $cliente->nombrecompletosinidentificacion;
+                    $table->asunto = $model->asunto;                    
+                    $table->fechai = date("Y-m-d",strtotime($model->fechai)).' '.$model->horai;
+                    $fecha = $table->fechai;
+                    $minutos = Maquina::find()->where(['=','id_maquina',$model->maquina])->one();
+                    $minutos = '+'.$minutos->duracion.' minute';
+                    $nuevafecha = strtotime ( $minutos , strtotime ( $fecha ) ) ;                    
+                    $nuevafecha = date ( 'Y-m-d H:i:s' , $nuevafecha );
+                    $table->fechat = $nuevafecha;
+                    $table->id_profesional = $model->id_profesional;                    
                     $table->telefono = $model->telefono;
-                    $table->celular = $model->celular;
-                    $table->email = $model->email;
-                    $table->direccion = $model->direccion;                                        
+                    $table->maquina = $model->maquina;                                                                               
                     $table->sede_fk = $model->sede_fk;
+                    $table->observaciones = $model->observaciones;
                     if ($table->insert()) {
                         $msg = "Registros guardados correctamente";
-                        $model->identificacion = null;
-                        $model->nombre1 = null;
-                        $model->nombre2 = null;                       
-                        $model->apellido1 = null;
-                        $model->apellido2 = null;                        
+                        $model->identificacion = null;                        
+                        $model->asunto = null;                       
+                        $model->fechai = null;
+                        $model->horai = null;
+                        $model->id_profesional = null;                        
                         $model->telefono = null;
-                        $model->celular = null;
-                        $model->email = null;
-                        $model->direccion = null;                        
+                        $model->maquina = null;
                         $model->sede_fk = null;
+                        $model->observaciones = null;                        
                     } else {
                         $msg = "error";
                     }
@@ -131,7 +147,7 @@ use yii\web\UploadedFile;
 
         public function actionEditar()
         {
-            $model = new FormCliente();
+            $model = new FormEvento();
             $msg = null;
             $tipomsg = null;
             if ($model->load(Yii::$app->request->post()) && Yii::$app->request->isAjax) {
@@ -140,18 +156,24 @@ use yii\web\UploadedFile;
             }
             if ($model->load(Yii::$app->request->post())) {
                 if ($model->validate()) {
-                    $table = Cliente::find()->where(['cliente_pk' => $model->cliente_pk])->one();
+                    $table = Eventos::find()->where(['id' => $model->id])->one();
                     if ($table) {
                         $table->identificacion = $model->identificacion;
-                        $table->nombre1 = $model->nombre1;
-                        $table->nombre2 = $model->nombre2;                        
-                        $table->apellido1 = $model->apellido1;
-                        $table->apellido2 = $model->apellido2;                        
+                        $cliente = \app\models\Cliente::find()->where(['=','identificacion',$model->identificacion])->one();
+                        $table->nombres = $cliente->nombrecompletosinidentificacion;
+                        $table->asunto = $model->asunto;                    
+                        $table->fechai = date("Y-m-d",strtotime($model->fechai)).' '.$model->horai;
+                        $fecha = $table->fechai;
+                        $minutos = Maquina::find()->where(['=','id_maquina',$model->maquina])->one();
+                        $minutos = '+'.$minutos->duracion.' minute';
+                        $nuevafecha = strtotime ( $minutos , strtotime ( $fecha ) ) ;                    
+                        $nuevafecha = date ( 'Y-m-d H:i:s' , $nuevafecha );
+                        $table->fechat = $nuevafecha;
+                        $table->id_profesional = $model->id_profesional;                    
                         $table->telefono = $model->telefono;
-                        $table->celular = $model->celular;
-                        $table->email = $model->email;
-                        $table->direccion = $model->direccion;                        
-                        $table->sede_fk = $model->sede_fk;                        
+                        $table->maquina = $model->maquina;                                                                               
+                        $table->sede_fk = $model->sede_fk;
+                        $table->observaciones = $model->observaciones;                       
                         if ($table->update()) {
                             $msg = "El registro ha sido actualizado correctamente";
                         } else {
@@ -166,28 +188,42 @@ use yii\web\UploadedFile;
                     $model->getErrors();
                 }
             }
-            if (Yii::$app->request->get("cliente_pk")) {
-                $cliente_pk = Html::encode($_GET["cliente_pk"]);
-                $table = Cliente::find()->where(['cliente_pk' => $cliente_pk])->one();
+            if (Yii::$app->request->get("id")) {
+                $id = Html::encode($_GET["id"]);
+                $table = Eventos::find()->where(['id' => $id])->one();
                 if ($table) {
-                    $model->cliente_pk = $table->cliente_pk;
-                    $model->identificacion = $table->identificacion;
-                    $model->nombre1 = $table->nombre1;
-                    $model->nombre2 = $table->nombre2;                    
-                    $model->apellido1 = $table->apellido1;
-                    $model->apellido2 = $table->apellido2;                    
+                    $model->id = $table->id;
+                    $model->asunto = $table->asunto;
+                    $model->identificacion = $table->identificacion;                                        
+                    $model->maquina = $table->maquina;
+                    $model->fechai = date("Y-m-d",strtotime($table->fechai));
+                    $model->horai = date("H:i:s",strtotime($table->fechai));
                     $model->telefono = $table->telefono;
-                    $model->celular = $table->celular;
-                    $model->email = $table->email;
-                    $model->direccion = $table->direccion;                    
+                    $model->id_profesional = $table->id_profesional;
+                    $model->observaciones = $table->observaciones;                    
                     $model->sede_fk = $table->sede_fk;
                 } else {
-                    return $this->redirect(["cliente/index"]);
+                    return $this->redirect(["evento/index"]);
                 }
             } else {
-                return $this->redirect(["cliente/index"]);
+                return $this->redirect(["evento/index"]);
             }
             return $this->render("editar", ["model" => $model, "msg" => $msg, "tipomsg" => $tipomsg]);
-        }                               
+        }
+        
+        public function actionCancelar($id) {
+        if (Yii::$app->request->get()) {
+            $evento = Eventos::findOne($id);
+            if ($evento->cancelo_no_asistio == 0){
+                $evento->cancelo_no_asistio = 1;                
+            }else{
+                $evento->cancelo_no_asistio = 0;                
+            }
+            $evento->save(false);
+            $this->redirect(["evento/index"]);
+        } else {
+            $this->redirect(["evento/index"]);
+        }
+    }
 
 }
