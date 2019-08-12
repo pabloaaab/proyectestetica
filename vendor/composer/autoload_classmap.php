@@ -6,11 +6,7 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'FPDF_TPL' => $vendorDir . '/setasign/fpdi/fpdf_tpl.php',
-    'FPDI' => $vendorDir . '/setasign/fpdi/fpdi.php',
-    'FilterASCII85' => $vendorDir . '/setasign/fpdi/filters/FilterASCII85.php',
-    'FilterASCIIHexDecode' => $vendorDir . '/setasign/fpdi/filters/FilterASCIIHexDecode.php',
-    'FilterLZW' => $vendorDir . '/setasign/fpdi/filters/FilterLZW.php',
+    'JsonException' => $vendorDir . '/symfony/polyfill-php73/Resources/stubs/JsonException.php',
     'PHPUnit\\Exception' => $vendorDir . '/phpunit/phpunit/src/Exception.php',
     'PHPUnit\\Framework\\Assert' => $vendorDir . '/phpunit/phpunit/src/Framework/Assert.php',
     'PHPUnit\\Framework\\AssertionFailedError' => $vendorDir . '/phpunit/phpunit/src/Framework/AssertionFailedError.php',
@@ -237,6 +233,7 @@ return array(
     'PHP_Token_CLOSE_SQUARE' => $vendorDir . '/phpunit/php-token-stream/src/Token.php',
     'PHP_Token_CLOSE_TAG' => $vendorDir . '/phpunit/php-token-stream/src/Token.php',
     'PHP_Token_COALESCE' => $vendorDir . '/phpunit/php-token-stream/src/Token.php',
+    'PHP_Token_COALESCE_EQUAL' => $vendorDir . '/phpunit/php-token-stream/src/Token.php',
     'PHP_Token_COLON' => $vendorDir . '/phpunit/php-token-stream/src/Token.php',
     'PHP_Token_COMMA' => $vendorDir . '/phpunit/php-token-stream/src/Token.php',
     'PHP_Token_COMMENT' => $vendorDir . '/phpunit/php-token-stream/src/Token.php',
@@ -282,6 +279,7 @@ return array(
     'PHP_Token_FILE' => $vendorDir . '/phpunit/php-token-stream/src/Token.php',
     'PHP_Token_FINAL' => $vendorDir . '/phpunit/php-token-stream/src/Token.php',
     'PHP_Token_FINALLY' => $vendorDir . '/phpunit/php-token-stream/src/Token.php',
+    'PHP_Token_FN' => $vendorDir . '/phpunit/php-token-stream/src/Token.php',
     'PHP_Token_FOR' => $vendorDir . '/phpunit/php-token-stream/src/Token.php',
     'PHP_Token_FOREACH' => $vendorDir . '/phpunit/php-token-stream/src/Token.php',
     'PHP_Token_FUNCTION' => $vendorDir . '/phpunit/php-token-stream/src/Token.php',
@@ -372,6 +370,7 @@ return array(
     'PHP_Token_UNSET_CAST' => $vendorDir . '/phpunit/php-token-stream/src/Token.php',
     'PHP_Token_USE' => $vendorDir . '/phpunit/php-token-stream/src/Token.php',
     'PHP_Token_USE_FUNCTION' => $vendorDir . '/phpunit/php-token-stream/src/Token.php',
+    'PHP_Token_Util' => $vendorDir . '/phpunit/php-token-stream/src/Token/Util.php',
     'PHP_Token_VAR' => $vendorDir . '/phpunit/php-token-stream/src/Token.php',
     'PHP_Token_VARIABLE' => $vendorDir . '/phpunit/php-token-stream/src/Token.php',
     'PHP_Token_WHILE' => $vendorDir . '/phpunit/php-token-stream/src/Token.php',
@@ -554,6 +553,4 @@ return array(
     'TheSeer\\Tokenizer\\TokenCollectionException' => $vendorDir . '/theseer/tokenizer/src/TokenCollectionException.php',
     'TheSeer\\Tokenizer\\Tokenizer' => $vendorDir . '/theseer/tokenizer/src/Tokenizer.php',
     'TheSeer\\Tokenizer\\XMLSerializer' => $vendorDir . '/theseer/tokenizer/src/XMLSerializer.php',
-    'fpdi_pdf_parser' => $vendorDir . '/setasign/fpdi/fpdi_pdf_parser.php',
-    'pdf_context' => $vendorDir . '/setasign/fpdi/pdf_context.php',
 );

@@ -3,12 +3,14 @@ Change Log: `yii2-widget-select2`
 
 ## Version 2.1.4
 
-**Date:** _under development_
+**Date:** 01-Aug-2019
 
-- (enh #168, #236, #246, #247, #253): Proper revert of behavior for select all toggle visibility.
-- Update README.
+- (enh #288): Modify to read select2 plugin assets from its packagist repository.
+- (enh #286): Fix demos page for broken _ajax remote data example_.
 - (enh #275): Add Hebrew Translations.
 - (enh #272): Update Greek Translations.
+- Update README.
+- (enh #168, #236, #246, #247, #253): Proper revert of behavior for select all toggle visibility.
 
 ## Version 2.1.3
 

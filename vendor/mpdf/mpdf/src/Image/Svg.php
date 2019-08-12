@@ -1369,10 +1369,10 @@ class Svg
 		else if (strtolower($critere_style['fill']) == 'currentcolor' && $element != 'line') {
 			$col = $this->colorConverter->convert($critere_style['color'], $this->mpdf->PDFAXwarnings);
 			if ($col) {
-				if ($col{0} == 5) {
+				if ($col{0} == 5 && is_numeric($col{4})) {
 					$critere_style['fill-opacity'] = ord($col{4} / 100);
 				} // RGBa
-				if ($col{0} == 6) {
+				if ($col{0} == 6 && is_numeric($col{5})) {
 					$critere_style['fill-opacity'] = ord($col{5} / 100);
 				} // CMYKa
 				$path_style .= $this->mpdf->SetFColor($col, true) . ' ';
@@ -1381,10 +1381,10 @@ class Svg
 		} else if ($critere_style['fill'] != 'none' && $element != 'line') {
 			$col = $this->colorConverter->convert($critere_style['fill'], $this->mpdf->PDFAXwarnings);
 			if ($col) {
-				if ($col{0} == 5) {
+				if ($col{0} == 5 && is_numeric($col{4})) {
 					$critere_style['fill-opacity'] = ord($col{4} / 100);
 				} // RGBa
-				if ($col{0} == 6) {
+				if ($col{0} == 6 && is_numeric($col{5})) {
 					$critere_style['fill-opacity'] = ord($col{5} / 100);
 				} // CMYKa
 				$path_style .= $this->mpdf->SetFColor($col, true) . ' ';
@@ -1410,10 +1410,10 @@ class Svg
 		else if (strtolower($critere_style['stroke']) == 'currentcolor') {
 			$col = $this->colorConverter->convert($critere_style['color'], $this->mpdf->PDFAXwarnings);
 			if ($col) {
-				if ($col{0} == 5) {
+				if ($col{0} == 5 && is_numeric($col{4})) {
 					$critere_style['stroke-opacity'] = ord($col{4} / 100);
 				} // RGBa
-				if ($col{0} == 6) {
+				if ($col{0} == 6 && is_numeric($col{5})) {
 					$critere_style['stroke-opacity'] = ord($col{5} / 100);
 				} // CMYKa
 				$path_style .= $this->mpdf->SetDColor($col, true) . ' ';
@@ -1426,10 +1426,10 @@ class Svg
 			if ($col) {
 				// mPDF 5.0.051
 				// mPDF 5.3.74
-				if ($col{0} == 5) {
+				if ($col{0} == 5 && is_numeric($col{4})) {
 					$critere_style['stroke-opacity'] = ord($col{4} / 100);
 				} // RGBa
-				if ($col{0} == 6) {
+				if ($col{0} == 6 && is_numeric($col{5})) {
 					$critere_style['stroke-opacity'] = ord($col{5} / 100);
 				} // CMYKa
 				$path_style .= $this->mpdf->SetDColor($col, true) . ' ';
@@ -3903,11 +3903,8 @@ class Svg
 			$d4 = sqrt(pow(($cy - 1), 2) + pow(($cx - 1), 2));
 			$maxd = max($d1, $d2, $d3, $d4);
 		}
-		if ($cr < $maxd) {
-			return true;
-		} else {
-			return false;
-		}
+
+		return $cr < $maxd;
 	}
 
 	private function testIntersect($x1, $y1, $x2, $y2, $x3, $y3, $x4, $y4)

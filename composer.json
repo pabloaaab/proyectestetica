@@ -26,7 +26,8 @@
         "kartik-v/yii2-mpdf": "dev-master",
         "inquid/yii2-fpdf": "*",
         "moonlandsoft/yii2-phpexcel": "*",
-        "alexgx/yii2-phpexcel" : "dev-master"
+        "alexgx/yii2-phpexcel" : "dev-master",
+        "ptrnov/yii2-scheduler-fullcalendar": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

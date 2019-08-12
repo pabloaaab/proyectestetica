@@ -84,9 +84,12 @@ class Historia extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['identificacion', 'edad', 'consumo_grasa', 'consumo_azucar', 'fuma', 'alcohol', 'consumo_alcohol', 'duerme_bien', 'hace_ejercicio', 'aph_patologia', 'aph_quirurgicos', 'aph_alergicos', 'aph_toxicos', 'apm_agregar', 'apm_menarca', 'apm_embarazo', 'sede_fk'], 'integer'],
-            [['fecha_nacimiento', 'fecha_creacion', 'fecha_modificacion'], 'safe'],
+            [['identificacion', 'edad', 'consumo_grasa', 'consumo_azucar', 'fuma', 'alcohol', 'consumo_alcohol', 'duerme_bien', 'hace_ejercicio', 'aph_patologia', 'aph_quirurgicos', 'aph_alergicos', 'aph_toxicos', 'apm_agregar', 'apm_menarca', 'apm_embarazo', 'sede_fk'], 'string'],
+            [['fecha_nacimiento'], 'safe'],
             [['telefono', 'celular'], 'required'],
+            ['id_historia','default'],
+            ['identificacion', 'identificacion_existe'],
+            ['identificacion', 'identificacion_no_existe'],
             [['observaciones', 'motivo_consulta', 'enfermedad_actual', 'revision_por_sistema', 'examen_fisico', 'af_observaciones', 'notas_clinicas'], 'string'],
             [['nombre', 'direccion'], 'string', 'max' => 150],
             [['email', 'estado_civil', 'lugar_residencia', 'aseguradora_salud'], 'string', 'max' => 80],
@@ -104,66 +107,85 @@ class Historia extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id_historia' => 'Id Historia',
-            'nombre' => 'Nombre',
-            'identificacion' => 'Identificacion',
-            'fecha_nacimiento' => 'Fecha Nacimiento',
-            'email' => 'Email',
-            'ocupacion' => 'Ocupacion',
-            'sexo' => 'Sexo',
-            'edad' => 'Edad',
-            'telefono' => 'Telefono',
-            'celular' => 'Celular',
-            'direccion' => 'Direccion',
-            'estado_civil' => 'Estado Civil',
-            'lugar_residencia' => 'Lugar Residencia',
-            'aseguradora_salud' => 'Aseguradora Salud',
-            'fecha_creacion' => 'Fecha Creacion',
-            'fecha_modificacion' => 'Fecha Modificacion',
-            'consumo_grasa' => 'Consumo Grasa',
-            'consumo_azucar' => 'Consumo Azucar',
-            'fuma' => 'Fuma',
-            'cuanto_diario' => 'Cuanto Diario',
-            'alcohol' => 'Alcohol',
-            'consumo_alcohol' => 'Consumo Alcohol',
-            'duerme_bien' => 'Duerme Bien',
-            'hace_ejercicio' => 'Hace Ejercicio',
-            'clase' => 'Clase',
-            'frecuencia' => 'Frecuencia',
-            'observaciones' => 'Observaciones',
-            'motivo_consulta' => 'Motivo Consulta',
-            'enfermedad_actual' => 'Enfermedad Actual',
-            'revision_por_sistema' => 'Revision Por Sistema',
-            'aph_patologia' => 'Aph Patologia',
-            'aph_patologia_t' => 'Aph Patologia T',
-            'aph_quirurgicos' => 'Aph Quirurgicos',
-            'aph_quirurgicos_t' => 'Aph Quirurgicos T',
-            'aph_alergicos' => 'Aph Alergicos',
-            'aph_alergicos_t' => 'Aph Alergicos T',
-            'aph_toxicos' => 'Aph Toxicos',
-            'aph_toxicos_t' => 'Aph Toxicos T',
-            'apm_agregar' => 'Apm Agregar',
-            'apm_agregar_t' => 'Apm Agregar T',
-            'apm_menarca' => 'Apm Menarca',
-            'apm_fecha_ultima_m' => 'Apm Fecha Ultima M',
-            'apm_embarazo' => 'Apm Embarazo',
-            'apm_metodo_planificar' => 'Apm Metodo Planificar',
-            'examen_fisico' => 'Examen Fisico',
-            'presion_arterial' => 'Presion Arterial',
-            'frecuencia_cardiaca' => 'Frecuencia Cardiaca',
-            'frecuencia_respiratoria' => 'Frecuencia Respiratoria',
-            'peso' => 'Peso',
-            'talla' => 'Talla',
-            'imc' => 'Imc',
-            'cabeza' => 'Cabeza',
-            'cuello' => 'Cuello',
-            'cardio_respiratorio' => 'Cardio Respiratorio',
-            'abdomen' => 'Abdomen',
-            'extremidades' => 'Extremidades',
-            'piel' => 'Piel',
-            'af_observaciones' => 'Af Observaciones',
-            'notas_clinicas' => 'Notas Clinicas',
-            'sede_fk' => 'Sede Fk',
+            'id_historia' => '',
+            'nombre' => 'Nombre Completo:',
+            'identificacion' => 'Identificación:',
+            'fecha_nacimiento' => 'Fecha Nacimiento:',
+            'email' => 'Email:',
+            'ocupacion' => 'Ocupación:',
+            'sexo' => 'Sexo:',
+            'edad' => 'Edad:',
+            'telefono' => 'Teléfono:',
+            'celular' => 'Celular:',
+            'direccion' => 'Dirección:',
+            'estado_civil' => 'Estado Civil:',
+            'lugar_residencia' => 'Lugar Residencia:',
+            'aseguradora_salud' => 'Aseguradora de Salud:',            
+            'consumo_grasa' => 'Consumo de Grasa:',
+            'consumo_azucar' => 'Consumo de Azucar:',
+            'fuma' => 'Fuma:',
+            'cuanto_diario' => 'Cuanto Diario:',
+            'alcohol' => 'Alcohol:',
+            'consumo_alcohol' => 'Consumo Alcohol:',
+            'duerme_bien' => 'Duerme Bien:',
+            'hace_ejercicio' => 'Hace Ejercicio:',
+            'clase' => 'Clase:',
+            'frecuencia' => 'Frecuencia:',
+            'observaciones' => 'Observaciones:',
+            'motivo_consulta' => 'Motivo de Consulta:',
+            'enfermedad_actual' => 'Enfermedad Actual:',
+            'revision_por_sistema' => 'Revision Por Sistema:',
+            'aph_patologia' => 'Patologia:',
+            'aph_patologia_t' => 'Patologia:',
+            'aph_quirurgicos' => 'Quirurgicos:',
+            'aph_quirurgicos_t' => 'Quirurgicos:',
+            'aph_alergicos' => 'Alergicos:',
+            'aph_alergicos_t' => 'Alergicos:',
+            'aph_toxicos' => 'Toxicos:',
+            'aph_toxicos_t' => 'Toxicos:',
+            'apm_agregar' => 'Agregar Antecedentes Obstreticos:',
+            'apm_agregar_t' => 'Agregar Antecedentes Obstreticos:',
+            'apm_menarca' => 'Menarca:',
+            'apm_fecha_ultima_m' => 'Fecha Ultima M:',
+            'apm_embarazo' => 'Embarazo:',
+            'apm_metodo_planificar' => 'Metodo Planificar:',
+            'examen_fisico' => 'Examen Fisico:',
+            'presion_arterial' => 'Presion Arterial:',
+            'frecuencia_cardiaca' => 'Frecuencia Cardiaca:',
+            'frecuencia_respiratoria' => 'Frecuencia Respiratoria:',
+            'peso' => 'Peso:',
+            'talla' => 'Talla:',
+            'imc' => 'Imc:',
+            'cabeza' => 'Cabeza:',
+            'cuello' => 'Cuello:',
+            'cardio_respiratorio' => 'Cardio Respiratorio:',
+            'abdomen' => 'Abdomen:',
+            'extremidades' => 'Extremidades:',
+            'piel' => 'Piel:',
+            'af_observaciones' => 'Observaciones:',            
+            'sede_fk' => 'Sede:',
         ];
+    }
+    
+    public function identificacion_existe($attribute, $params)
+    {
+        //Buscar la identificacion en la tabla
+        $table = Historia::find()->where("identificacion=:identificacion", [":identificacion" => $this->identificacion])->andWhere("id_historia!=:id_historia", [':id_historia' => $this->id_historia]);
+        //Si la identificacion existe mostrar el error
+        if ($table->count() == 1)
+        {
+            $this->addError($attribute, "El número de identificación ya existe".$this->identificacion);
+        }
+    }
+    
+    public function identificacion_no_existe($attribute, $params)
+    {
+        //Buscar la cedula/nit en la tabla
+        $table = Cliente::find()->where("identificacion=:identificacion", [":identificacion" => $this->identificacion]);
+        //Si la identificacion no existe en Cliente mostrar el error
+        if ($table->count() == 0)
+        {
+            $this->addError($attribute, "El número de identificación No existe en clientes, por favor realizar la inscripción");
+        }
     }
 }

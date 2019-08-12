@@ -75,7 +75,7 @@ if (!Yii::$app->user->isGuest) {
                 ]
             ],            
             [                
-                'label' => 'Configuración',
+                'label' => 'Config',
                 'items' => [
                     ['label' => 'Usuarios', 'url' => ['/site/usuarios']],
                     ['label' => 'Otros', 'url' => ['/site/index']],
