@@ -100,4 +100,24 @@ class ConsentimientoCliente extends \yii\db\ActiveRecord
             $this->addError($attribute, "El número de identificación ya existe".$this->id);
         }
     }
+    
+    public function getConsentimientos()
+    {
+        if($this->consentimiento == 1){
+            $consentimiento = "SI";
+        }else{
+            $consentimiento = "NO";
+        }
+        return $consentimiento;
+    }
+    
+    public function getFirmo()
+    {
+        if($this->firma <> 0){
+            $firmo = "SI";
+        }else{
+            $firmo = "NO";
+        }
+        return $firmo;
+    }
 }

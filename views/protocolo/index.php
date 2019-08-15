@@ -61,6 +61,8 @@ $this->title = 'Protocolos';
                 <th scope="col"></th>
                 <th scope="col"></th>
                 <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col"></th>
             </tr>
             </thead>
             <tbody>
@@ -76,9 +78,12 @@ $this->title = 'Protocolos';
                 <td><?= $firma ?></td>                                                
                 <td><a href="<?= Url::toRoute(["protocolo/editar", "id" => $val->consentimiento_cliente_pk]) ?>" ><img src="svg/si-glyph-document-edit.svg" align="center" width="20px" height="20px" title="Editar"></a></td>
                 <td><a href="<?= Url::toRoute(["protocolo/firma_cliente", "id" => $val->consentimiento_cliente_pk]) ?>" ><img src="svg/si-glyph-pencil.svg" align="center" width="20px" height="20px" title="Firma Cliente"></a></td>                
+                <td><a href="<?= Url::toRoute(["protocolo/vista", "id" => $val->consentimiento_cliente_pk]) ?>" ><img src="svg/si-glyph-document-bullet-list.svg" align="center" width="20px" height="20px" title="Vista"></a></td>
                 <?php if ($val->consentimiento == 1 && $val->firma != "") { ?>
-                <td><a href="<?= Url::toRoute(["protocolo/imprimir", "id" => $val->consentimiento_cliente_pk]) ?>"><img src="svg/si-glyph-print.svg" align="center" width="20px" height="20px" title="Imprimir"></a></td>
+                <td><a href="<?= Url::toRoute(["protocolo/imprimirconsentimiento", "id" => $val->consentimiento_cliente_pk]) ?>"><img src="svg/si-glyph-print.svg" align="center" width="20px" height="20px" title="Imprimir Consentimiento"></a></td>
+                <td><a href="<?= Url::toRoute(["protocolo/imprimirprotocolo", "id" => $val->consentimiento_cliente_pk]) ?>"><img src="svg/si-glyph-print.svg" align="center" width="20px" height="20px" title="Imprimir Protocolos"></a></td>
                 <?php } else { ?>
+                    <td></td>
                     <td></td>
                 <?php } ?>    
             </tr>

@@ -20,6 +20,7 @@ use yii\helpers\Url;
 use app\models\FormFiltroProtocolo;
 use yii\web\UploadedFile;
 use app\models\FormFirmaCliente;
+use app\models\FormProtocoloNuevo;
 
     class ProtocoloController extends Controller
     {
@@ -74,6 +75,18 @@ use app\models\FormFirmaCliente;
             }
 
         }
+        
+        public function actionVista($id)
+    {
+        $model = ConsentimientoCliente::findOne($id);
+        $protocolos = Protocolo::find()->Where(['=', 'consentimiento_cliente_fk', $id])->all();        
+        $mensaje = "";                        
+        return $this->render('vista', [
+            'model' => $model,            
+            'protocolos' => $protocolos,
+            'mensaje' => $mensaje,
+        ]);
+    }
 
         public function actionNuevo()
         {
@@ -197,11 +210,93 @@ use app\models\FormFirmaCliente;
             
             return $this->render("firmaCliente", ["model" => $model, "msg" => $msg]);
         }
-              
-        public function actionImprimir($id) {
-            $formato = FormatoAutorizacion::findOne(1);
-            $model = Habeasdata::find()->where(['id' => $id])->one();
-            return $this->render("generarimprimir", ["model" => $model, 'formato' => $formato]);
+        
+        public function actionNuevoprotocolo($id) {
+            $model = new FormProtocoloNuevo();        
+            if ($model->load(Yii::$app->request->post())) {                                    
+                $table = new Protocolo();            
+                $table->fecha = $model->fecha;
+                $table->pieza_mano = $model->pieza_mano;
+                $table->potencia_tiempo = $model->potencia_tiempo;
+                $table->energia = $model->energia;
+                $table->area = $model->area;
+                $table->pases = $model->pases;
+                $table->consentimiento_cliente_fk = $id;
+                $table->save(false);                
+
+                return $this->redirect(['vista','id' => $id]);
+            }
+            return $this->renderAjax('nuevoprotocolo', [
+                'model' => $model,            
+            ]);        
         }
+        
+        public function actionEditarprotocolo()
+    {
+        $id_protocolo = Html::encode($_POST["iddetalle"]);
+        $consentimiento_cliente_pk = Html::encode($_POST["consentimiento_cliente_pk"]);
+        if(Yii::$app->request->post()){
+            if((int) $id_protocolo)
+            {
+                $table = Protocolo::findOne($id_protocolo);
+                if ($table) {
+                    $table->fecha = Html::encode($_POST["fecha"]);
+                    $table->pieza_mano = Html::encode($_POST["pieza_mano"]);
+                    $table->potencia_tiempo = Html::encode($_POST["potencia_tiempo"]);
+                    $table->area = Html::encode($_POST["area"]);
+                    $table->energia = Html::encode($_POST["energia"]);
+                    $table->pases = Html::encode($_POST["pases"]);
+                    $table->save(false);                                        
+                    $this->redirect(["protocolo/vista",'id' => $consentimiento_cliente_pk]);
+
+                } else {
+                    $msg = "El registro seleccionado no ha sido encontrado";
+                    $tipomsg = "danger";
+                }
+            }
+        }
+        //return $this->render("_formeditardetalle", ["model" => $model,]);
+    }
+
+        
+        public function actionEliminarprotocolo()
+        {
+            if(Yii::$app->request->post())
+            {
+                $id_protocolo = Html::encode($_POST["iddetalle"]);
+                $consentimiento_cliente_pk = Html::encode($_POST["consentimiento_cliente_pk"]);
+                if((int) $id_protocolo)
+                {
+                    $protocolo = Protocolo::findOne($id_protocolo);                
+                    if(Protocolo::deleteAll("id_protocolo=:id_protocolo", [":id_protocolo" => $id_protocolo]))
+                    {                                                                                
+                        $this->redirect(["protocolo/vista",'id' => $consentimiento_cliente_pk]);
+                    }
+                    else
+                    {
+                        echo "<meta http-equiv='refresh' content='3; ".Url::toRoute("protocolo/index")."'>";
+                    }
+                }
+                else
+                {
+                    echo "<meta http-equiv='refresh' content='3; ".Url::toRoute("protocolo/index")."'>";
+                }
+            }
+            else
+            {
+                return $this->redirect(["protocolo/index"]);
+            }
+        }
+              
+        public function actionImprimirconsentimiento($id) {
+            $formato = \app\models\Consentimiento::findOne(1);
+            $model = ConsentimientoCliente::find()->where(['consentimiento_cliente_pk' => $id])->one();
+            return $this->render("generarimprimirconsentimiento", ["model" => $model, 'formato' => $formato]);
+        }
+        
+        public function actionImprimirprotocolo($id) {            
+            $model = ConsentimientoCliente::find()->where(['consentimiento_cliente_pk' => $id])->one();
+            return $this->render("generarimprimirprotocolo", ["model" => $model]);
+        }                
 
 }
