@@ -67,6 +67,7 @@ if (!Yii::$app->user->isGuest) {
             [
                 'label' => 'Movimientos',
                 'items' => [                                        
+                    ['label' => 'Sección Pagos', 'url' => ['/seccion/index']],
                     ['label' => 'Citas', 'url' => ['/evento/index']],
                     ['label' => 'Agenda', 'url' => ['/evento/indexevento']],
                     ['label' => 'Historia', 'url' => ['/historia/index']],

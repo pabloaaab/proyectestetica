@@ -23,14 +23,21 @@ class PDF extends FPDF {
           $this->Cell(155,7,'Complex Las Vegas - Local 103',0,0,'C',1);
 	  $this->SetXY(55, 38); 
           $this->Cell(155,7,'Telefono: 3206946957',0,0,'C',1);
-	  $this->Ln(10);
+	  $this->SetXY(10, 50); 
+          $this->Cell(30,7,'PROTOCOLOS',0,0,'C',0);
+          $this->SetFont('Helvetica','B',12);
+          $this->SetXY(10, 60); 
+          $this->Cell(40,7,'FOTOTIPO DE PIEL:',0,0,'C',0);
+          $this->SetXY(110, 60); 
+          $this->Cell(43,7,'FOTOTIPO DE AREA:',0,0,'C',0);
+          $this->Ln(7);
           $this->EncabezadoDetalles();
         
         
     }
 
     function EncabezadoDetalles() {
-        $this->Ln(7);
+        $this->Ln(5);
         $header = array('FECHA', 'PIEZA DE MANO', 'POTENCIA[W] Y TIEMPO', 'ENERGIA ACUMULADA[KJ]', 'AREA', 'N. PASES');
         $this->SetFillColor(200, 200, 200);
         $this->SetTextColor(0);
@@ -39,7 +46,7 @@ class PDF extends FPDF {
         $this->SetFont('', 'B', 8);
 
         //creamos la cabecera de la tabla.
-        $w = array(25, 35, 40, 45, 25, 25);
+        $w = array(25, 35, 35, 40, 45, 15);
         for ($i = 0; $i < count($header); $i++)
             if ($i == 0 || $i == 1)
                 $this->Cell($w[$i], 5, $header[$i], 1, 0, 'C', 1);
@@ -54,7 +61,18 @@ class PDF extends FPDF {
     }
     
     function Body($pdf,$model) {
-        
+        $detalles = \app\models\Protocolo::find()->where(['=','consentimiento_cliente_fk',$model->consentimiento_cliente_pk])->all();
+        $pdf->SetX(10);
+        $pdf->SetFont('Arial', '', 8);        
+        foreach ($detalles as $detalle) {             
+            $pdf->Cell(25, 5, $detalle->fecha, 1, 0, 'C');            
+            $pdf->Cell(35, 5, $detalle->pieza_mano, 1, 0, 'C');
+            $pdf->Cell(35, 5, $detalle->potencia_tiempo, 1, 0, 'C');
+            $pdf->Cell(40, 5, $detalle->energia, 1, 0, 'C');
+            $pdf->Cell(45, 5, $detalle->area, 1, 0, 'C');
+            $pdf->Cell(15, 5, $detalle->pases, 1, 0, 'C');            
+            $pdf->Ln();
+        }
     }
 
     function Footer() 
