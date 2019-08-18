@@ -38,7 +38,7 @@ if ($usuarioperfil == 2) { //administrador
 }else{ //administrativo    
     $sede = ArrayHelper::map(\app\models\Sedes::find()->where(['=','estado',0])->andWhere(['=','sede_pk',$usuariosede])->all(), 'sede_pk','sede');
 }
-$seccion = ArrayHelper::map(\app\models\SeccionTipo::find()->where(['=','estado',0])->all(), 'seccion_tipo_pk','tipo');
+$seccion = ArrayHelper::map(\app\models\SeccionTipo::find()->all(), 'seccion_tipo_pk','tipo');
 $cliente = ArrayHelper::map(\app\models\Cliente::find()->all(), 'cliente_pk','nombrecompleto');
 ?>
     
