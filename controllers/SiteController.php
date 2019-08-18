@@ -155,7 +155,7 @@ class SiteController extends Controller
                 $table->nombrecompleto = $model->nombrecompleto;
                 $table->role = $model->perfil;
                 if ($table->role == 1){
-                    $perfil = "Usuario";
+                    $perfil = "Administrativo";
                 } 
                 if ($table->role == 2){
                         $perfil = "Administrador"; 
@@ -201,7 +201,7 @@ class SiteController extends Controller
                     $table->activate = $model->activo;
                     $table->sede_fk = $model->sede_fk;
                     if ($table->role == 1){
-                        $perfil = "Usuario";
+                        $perfil = "Administrativo";
                     } 
                     if ($table->role == 2){
                             $perfil = "Administrador"; 
