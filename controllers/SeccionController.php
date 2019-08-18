@@ -41,13 +41,13 @@ class SeccionController extends Controller {
                         $dato = "";
                     }
                     if ($usuarioperfil == 2) { //administrador
-                        $table = Seccion::find()                            
-                            ->andFilterWhere(['=', 'cliente_fk', $dato])                            
+                        $table = Seccion::find()                           
+                            ->Where(['=', 'cliente_fk', $dato])                            
                             ->orderBy('seccion_pk desc');
                     }else{ //administrativo
                         $table = Seccion::find()                            
                             ->andWhere(['=', 'sede_fk', $usuariosede])
-                            ->andFilterWhere(['=', 'cliente_fk', $dato])                            
+                            ->Where(['=', 'cliente_fk', $dato])                            
                             ->orderBy('seccion_pk desc');
                     }                    
                     $count = clone $table;
