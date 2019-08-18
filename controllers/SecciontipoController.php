@@ -30,8 +30,7 @@ use app\models\FormFiltroSeccionTipo;
                     if ($form->validate()) {
                         $search = Html::encode($form->q);
                         $table = SeccionTipo::find()
-                            ->where(['like', 'seccion_tipo_pk', $search])
-                            ->andWhere(['=','estado','0'])    
+                            ->where(['like', 'seccion_tipo_pk', $search])                               
                             ->orWhere(['like', 'tipo', $search])
                             ->orderBy('seccion_tipo_pk asc');
                         $count = clone $table;
@@ -47,8 +46,7 @@ use app\models\FormFiltroSeccionTipo;
                         $form->getErrors();
                     }
                 } else {
-                    $table = SeccionTipo::find()
-                        ->where(['=','estado','0'])
+                    $table = SeccionTipo::find()                        
                         ->orderBy('seccion_tipo_pk asc');
                     $count = clone $table;
                     $pages = new Pagination([
