@@ -28,7 +28,7 @@ class SeccionTipo extends \yii\db\ActiveRecord
     {
         return [
             [['tipo'], 'required'],
-            [['estado'], 'integer'],
+            //[['estado'], 'integer'],
             [['tipo'], 'string', 'max' => 40],
         ];
     }
@@ -41,7 +41,7 @@ class SeccionTipo extends \yii\db\ActiveRecord
         return [
             'seccion_tipo_pk' => 'Id',
             'tipo' => 'Tipo',
-            'estado' => 'Estado',
+            //'estado' => 'Estado',
         ];
     }
 }
