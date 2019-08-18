@@ -27,7 +27,7 @@ class FormCliente extends Model
     public function rules()
     {                    
         return [
-            [['nombre1', 'nombre2', 'apellido1', 'apellido2', 'telefono', 'celular', 'direccion', 'email'], 'required'],            
+            [['nombre1', 'apellido1', 'apellido2', 'celular'], 'required'],            
             [['sede_fk','identificacion','cliente_pk'], 'integer'], 
             ['identificacion', 'identificacion_existe'],
             [['nombre1', 'nombre2', 'apellido1', 'apellido2', 'telefono', 'celular'], 'string'],
