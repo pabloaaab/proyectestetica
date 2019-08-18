@@ -76,7 +76,7 @@ use yii\web\UploadedFile;
                         
                         $count = clone $table;
                         $pages = new Pagination([
-                            'pageSize' => 20,
+                            'pageSize' => 35,
                             'totalCount' => $count->count()
                         ]);
                         $model = $table
@@ -97,7 +97,7 @@ use yii\web\UploadedFile;
                     }
                     $count = clone $table;
                     $pages = new Pagination([
-                        'pageSize' => 20,
+                        'pageSize' => 35,
                         'totalCount' => $count->count(),
                     ]);
                     $model = $table
