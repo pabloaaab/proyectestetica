@@ -135,7 +135,7 @@ use yii\web\UploadedFile;
                     $table->email = $model->email;
                     $table->direccion = $model->direccion;                                        
                     $table->sede_fk = $model->sede_fk;
-                    if ($table->insert()) {
+                    if ($table->save(false)) {
                         $msg = "Registros guardados correctamente";
                         $model->identificacion = null;
                         $model->nombre1 = null;
