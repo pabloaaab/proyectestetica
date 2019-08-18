@@ -66,6 +66,23 @@ $maquina = ArrayHelper::map(\app\models\Maquina::find()->where(['<>','id_maquina
         </div>
     </div>
 </div>
+<?php }else { ?>
+<div class="panel panel-default panel-filters">
+    <div class="panel-heading">
+        Filtros de busqueda <i class="glyphicon glyphicon-filter"></i>
+    </div>
+	
+    <div class="panel-body" id="filtromatriculas">
+        <div class="row" >                                   
+            <?= $formulario->field($form, 'sede_fk')->dropDownList($sede,['prompt' => 'Seleccione...' ]) ?>
+            <?= $formulario->field($form, 'maquina')->dropDownList($maquina,['prompt' => 'Seleccione...' ]) ?>
+        </div>       
+        <div class="panel-footer text-right">
+            <?= Html::submitButton("Buscar", ["class" => "btn btn-primary"]) ?>
+            <a align="right" href="<?= Url::toRoute("evento/indexevento") ?>" class="btn btn-primary">Actualizar</a>
+        </div>
+    </div>
+</div>
 <?php } ?>
 <div id="calendar"></div>
 <script>
