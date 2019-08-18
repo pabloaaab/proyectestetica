@@ -26,16 +26,24 @@ use app\models\FormFirmaCliente;
         public function actionIndex()
         {
             if (!Yii::$app->user->isGuest) {
+                $usuario = \app\models\Users::find()->where(['=','id',Yii::$app->user->identity->id])->one();
+                $usuarioperfil = $usuario->role;
+                $usuariosede = $usuario->sede_fk;
                 $form = new FormFiltroHistoria;
                 $search = null;
                 if ($form->load(Yii::$app->request->get())) {
                     if ($form->validate()) {
                         $search = Html::encode($form->q);
-                        $table = Historia::find()
-                            ->where(['like', 'id_historia', $search])
-                            ->orWhere(['like', 'identificacion', $search])
-                            ->orWhere(['like', 'nombre', $search])
+                        if ($usuarioperfil == 2) { //administrador
+                            $table = Historia::find()                            
+                            ->andFilterWhere(['like', 'identificacion', $search])
                             ->orderBy('id_historia desc');
+                        }else{//administrativo
+                            $table = Historia::find()                            
+                            ->Where(['=','sede_fk',$usuariosede])        
+                            ->andFilterWhere(['like', 'identificacion', $search])                            
+                            ->orderBy('id_historia desc');
+                        }                        
                         $count = clone $table;
                         $pages = new Pagination([
                             'pageSize' => 20,
@@ -49,8 +57,14 @@ use app\models\FormFirmaCliente;
                         $form->getErrors();
                     }
                 } else {
-                    $table = Historia::find()
+                    if ($usuarioperfil == 2) { //administrador
+                        $table = Historia::find()                                
                         ->orderBy('id_historia desc');
+                    }else{ //administrativo
+                        $table = Historia::find()
+                        ->where(['=','sede_fk',$usuariosede])
+                        ->orderBy('id_historia desc');
+                    }                    
                     $count = clone $table;
                     $pages = new Pagination([
                         'pageSize' => 20,
@@ -76,7 +90,7 @@ use app\models\FormFirmaCliente;
 
         public function actionNuevo()
         {
-            $model = new Historia;
+            $model = new Historia();
             $msg = null;
             $tipomsg = null;
             if ($model->load(Yii::$app->request->post()) && Yii::$app->request->isAjax) {

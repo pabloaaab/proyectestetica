@@ -19,9 +19,13 @@ $this->title = 'Nuevo Usuario';
     'id' => 'formulario',
     'enableClientValidation' => false,
     'enableAjaxValidation' => true,
-]);
-
+]);        
 ?>
+    
+<?php
+$sede = ArrayHelper::map(app\models\Sedes::find()->where(['=','estado',0])->all(), 'sede_pk','sede');
+?>
+    
     <div class="row">
         <div class="col-lg-3">
             <?= $form->field($model, "username")->input("text") ?>
@@ -30,6 +34,7 @@ $this->title = 'Nuevo Usuario';
             <?= $form->field($model, "password_repeat")->input("password") ?>
             <?= $form->field($model, "nombrecompleto")->input("text") ?>
             <?= $form->field($model, 'perfil')->dropdownList(['1' => 'usuario', '2' => 'Administrador'], ['prompt' => 'Seleccione...']) ?>            
+            <?= $form->field($model, 'sede_fk')->dropDownList($sede,['prompt' => 'Seleccione...' ]) ?>
         </div>
     </div>
     

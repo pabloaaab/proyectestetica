@@ -88,7 +88,7 @@ class Historia extends \yii\db\ActiveRecord
             [['fecha_nacimiento'], 'safe'],
             [['telefono', 'celular'], 'required'],
             ['id_historia','default'],
-            ['identificacion', 'identificacion_existe'],
+            ['identificacion', 'identificacion_existe'],            
             ['identificacion', 'identificacion_no_existe'],
             [['observaciones', 'motivo_consulta', 'enfermedad_actual', 'revision_por_sistema', 'examen_fisico', 'af_observaciones', 'notas_clinicas'], 'string'],
             [['nombre', 'direccion'], 'string', 'max' => 150],
@@ -170,7 +170,7 @@ class Historia extends \yii\db\ActiveRecord
     public function identificacion_existe($attribute, $params)
     {
         //Buscar la identificacion en la tabla
-        $table = Historia::find()->where("identificacion=:identificacion", [":identificacion" => $this->identificacion])->andWhere("id_historia!=:id_historia", [':id_historia' => $this->id_historia]);
+        $table = Historia::find()->where("identificacion=:identificacion", [":identificacion" => $this->identificacion])->andWhere("id_historia!=:id_historia", [':id_historia' => $this->id_historia]);       
         //Si la identificacion existe mostrar el error
         if ($table->count() == 1)
         {

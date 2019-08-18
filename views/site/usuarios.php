@@ -27,7 +27,7 @@ $this->title = 'Usuarios';
 ]);
 ?>
 
-<div class="panel panel-primary panel-filters">
+<div class="panel panel-default panel-filters">
     <div class="panel-heading">
         Filtros de busqueda <i class="glyphicon glyphicon-filter"></i>
     </div>

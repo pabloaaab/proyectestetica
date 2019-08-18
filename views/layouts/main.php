@@ -61,7 +61,7 @@ if (!Yii::$app->user->isGuest) {
             [
                 'label' => 'Utilidades',
                 'items' => [
-                    ['label' => 'Informe Pagos', 'url' => ['/site/index']],                    
+                    ['label' => 'Informe Pagos', 'url' => ['/informepago/index']],                    
                 ]
             ],
             [
@@ -89,40 +89,48 @@ if (!Yii::$app->user->isGuest) {
         echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-center'],
         'items' => [
-        ['label' => 'Inicio', 'url' => ['/site/index']],
-        [
-            'label' => 'Administración',
-            'items' => [
-                ['label' => 'Clientes', 'url' => ['/cliente/index']],
-                ['label' => 'Sedes', 'url' => ['/sede/index']],
-                ['label' => 'Seccion Tipo', 'url' => ['/secciontipo/index']],
-                ['label' => 'Otros', 'url' => ['/site/index']],
-            ]
-        ],
-        [
+            ['label' => 'Inicio', 'url' => ['/site/index']],
+            [
+                'label' => 'Administración',
+                'items' => [
+                    ['label' => 'Clientes', 'url' => ['/cliente/index']],
+                    //['label' => 'Sedes', 'url' => ['/sede/index']],
+                    //['label' => 'Seccion Tipo', 'url' => ['/secciontipo/index']],
+                    ['label' => 'Otros', 'url' => ['/site/index']],
+                ]
+            ],
+            [
                 'label' => 'Procesos',
                 'items' => [                    
                     ['label' => 'Otros', 'url' => ['/site/index']],
                 ]
-        ],
-        [
-            'label' => 'Utilidades',
-            'items' => [
-                ['label' => 'Informe Pagos', 'url' => ['/site/index']],                    
+            ],
+            [
+                'label' => 'Utilidades',
+                'items' => [
+                    //['label' => 'Informe Pagos', 'url' => ['/informepago/index']],                    
+                ]
+            ],
+            [
+                'label' => 'Movimientos',
+                'items' => [                                        
+                    ['label' => 'Sección Pagos', 'url' => ['/seccion/index']],
+                    ['label' => 'Citas', 'url' => ['/evento/index']],
+                    ['label' => 'Agenda', 'url' => ['/evento/indexevento']],
+                    ['label' => 'Historia', 'url' => ['/historia/index']],
+                    ['label' => 'Protocolos', 'url' => ['/protocolo/index']],
+                    ['label' => 'HabeasData', 'url' => ['/habeasdata/index']],
+                ]
+            ],            
+            [                
+                'label' => 'Config',
+                'items' => [
+                    //['label' => 'Usuarios', 'url' => ['/site/usuarios']],
+                    ['label' => 'Otros', 'url' => ['/site/index']],
+                ],                
             ]
         ],
-        [
-            'label' => 'Movimientos',
-            'items' => [                                        
-                ['label' => 'Citas', 'url' => ['/cita/index']],
-                ['label' => 'Agenda', 'url' => ['/agenda/notas']],
-                ['label' => 'Historia', 'url' => ['/historia/notas']],
-                ['label' => 'Protocolos', 'url' => ['/protocolo/index']],
-                ['label' => 'HabeasData', 'url' => ['/habeasdata/index']],
-            ]
-        ],                        
-        ],
-        ]);
+    ]);
     }
         
     

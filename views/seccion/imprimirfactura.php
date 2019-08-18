@@ -1,4 +1,7 @@
+<?php
+$this->title = 'Imprimir Factura';
 
+?>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <style type="text/css">
  table {
@@ -53,7 +56,7 @@ display: inline;
 	<td align="center"><label>SEDE: <?php echo $model->sedeFk->sede;?></label></td>
   </tr>
   <tr>
-    <td colspan = "3"><label>FACTURADO A: <?php echo $model->clienteFk->nombrecompletosinidentificacion;?></label><label class="r">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IDENTIFICACIÓN: <?php echo $model->clienteFk->identificacion;?></label>&nbsp;&nbsp;&nbsp;<label class="anulado"><?php if ($model->estado_anulado == "SI"){ echo "ANULADO";}else {echo "";}?></label><br><label>POR CONCEPTO DE: <?php echo $model->seccion_pk . " - " . $model->seccion_pk . " - " . $model->seccion_pk;?></label>&nbsp;&nbsp;&nbsp;<label class="anulado"><?php if ($model->estado_anulado == "SI"){ echo "ANULADO";}else {echo "";}?></label><br><label>LA SUMA DE: $
+    <td colspan = "3"><label>FACTURADO A: <?php echo $model->clienteFk->nombrecompletosinidentificacion;?></label><label class="r">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IDENTIFICACIÓN: <?php echo $model->clienteFk->identificacion;?></label>&nbsp;&nbsp;&nbsp;<label class="anulado"><?php if ($model->estado_anulado == "SI"){ echo "ANULADO";}else {echo "";}?></label><br><label>POR CONCEPTO DE: <?php echo $model->clienteFk->nombrecompletosinidentificacion . " - " . $model->clienteFk->identificacion . " - " . $model->seccionTipoFk->tipo;?></label>&nbsp;&nbsp;&nbsp;<label class="anulado"><?php if ($model->estado_anulado == "SI"){ echo "ANULADO";}else {echo "";}?></label><br><label>LA SUMA DE:
 	<?php echo '$ '.number_format($model->total_pago);?> <?php if ($model->estado_anulado == "SI"){ echo "ANULADO";}else {echo "";} ?></label></td>
   </tr>
   <tr>
@@ -62,7 +65,7 @@ display: inline;
 	<td align="center"><label>CREDITO</label></td>
   </tr>
   <tr>
-    <td align="center"><?php echo $model->total_pago . " - " . $model->total_pago;?></td>
+    <td align="center"><?php echo $model->clienteFk->nombrecompletosinidentificacion . " - " . $model->clienteFk->identificacion;?></td>
 	<td align="center"><?php echo '$ '.number_format($model->total_pago);?></td>
 	<td align="center">-</td>
   </tr>

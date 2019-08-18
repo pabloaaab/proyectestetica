@@ -14,7 +14,7 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
     public $activate;
     public $role;
     public $nombrecompleto;
-    public $sede;
+    public $sede_fk;
     public $fechacreacion;
     public $perfil;
 

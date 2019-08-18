@@ -160,7 +160,8 @@ class SiteController extends Controller
                 if ($table->role == 2){
                         $perfil = "Administrador"; 
                 }                
-                $table->perfil = $perfil;                
+                $table->perfil = $perfil;   
+                $table->sede_fk = $model->sede_fk;
                 //Si el registro es guardado correctamente
                 if ($table->insert())
                 {
@@ -198,6 +199,14 @@ class SiteController extends Controller
                     $table->role = $model->role;                    
                     $table->email = $model->email;
                     $table->activate = $model->activo;
+                    $table->sede_fk = $model->sede_fk;
+                    if ($table->role == 1){
+                        $perfil = "Usuario";
+                    } 
+                    if ($table->role == 2){
+                            $perfil = "Administrador"; 
+                    }                
+                    $table->perfil = $perfil;
                     if ($table->save(false)) {
                         $msg = "El registro ha sido actualizado correctamente";
                         return $this->redirect(["site/usuarios"]);
@@ -222,6 +231,7 @@ class SiteController extends Controller
                 $model->role = $table->role;                
                 $model->email = $table->email;
                 $model->activo = $table->activate;
+                $model->sede_fk = $table->sede_fk;
             } else {
                 return $this->redirect(["site/usuarios"]);
             }

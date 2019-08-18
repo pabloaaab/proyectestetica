@@ -19,6 +19,7 @@ use app\models\Sedes;
 use app\models\FormEvento;
 use yii\helpers\Url;
 use app\models\FormFiltroEvento;
+use app\models\FormFiltroEventoAgenda;
 use yii\web\UploadedFile;
 
     class EventoController extends Controller
@@ -27,6 +28,9 @@ use yii\web\UploadedFile;
         public function actionIndex()
         {
             if (!Yii::$app->user->isGuest) {
+                $usuario = \app\models\Users::find()->where(['=','id',Yii::$app->user->identity->id])->one();
+                $usuarioperfil = $usuario->role;
+                $usuariosede = $usuario->sede_fk;
                 $form = new FormFiltroEvento;
                 $fecha = null;
                 $identificación = null;
@@ -51,13 +55,25 @@ use yii\web\UploadedFile;
                         if ($anio_mes_dia == "anio"){
                             $fecha = date('Y', strtotime($fecha));
                         }
-                        $table = Eventos::find()
+                        if ($usuarioperfil == 2) { //administrador
+                            $table = Eventos::find()
                             ->andFilterWhere(['like', 'fechai', $fecha])
                             ->andFilterWhere(['=', 'identificacion', $identificación])
                             ->andFilterWhere(['like', 'nombres', $cliente])
                             ->andFilterWhere(['like', 'maquina', $maquina])
                             ->andFilterWhere(['like', 'sede_fk', $sede])   
                             ->orderBy('fechai desc');
+                        }else{//administrativo
+                            $table = Eventos::find()
+                            ->where(['=', 'sede_fk', $usuariosede])
+                            ->andFilterWhere(['like', 'fechai', $fecha])
+                            ->andFilterWhere(['=', 'identificacion', $identificación])
+                            ->andFilterWhere(['like', 'nombres', $cliente])
+                            ->andFilterWhere(['like', 'maquina', $maquina])
+                            ->andFilterWhere(['like', 'sede_fk', $sede])   
+                            ->orderBy('fechai desc');
+                        }
+                        
                         $count = clone $table;
                         $pages = new Pagination([
                             'pageSize' => 20,
@@ -71,8 +87,14 @@ use yii\web\UploadedFile;
                         $form->getErrors();
                     }
                 } else {
-                    $table = Eventos::find()
+                    if ($usuarioperfil == 2) { //administrador
+                        $table = Eventos::find()                           
                         ->orderBy('fechai desc');
+                    }else{//administrativo
+                        $table = Eventos::find()
+                        ->where(['=', 'sede_fk', $usuariosede])                           
+                        ->orderBy('fechai desc');
+                    }
                     $count = clone $table;
                     $pages = new Pagination([
                         'pageSize' => 20,
@@ -215,10 +237,12 @@ use yii\web\UploadedFile;
         if (Yii::$app->request->get()) {
             $evento = Eventos::findOne($id);
             if ($evento->cancelo_no_asistio == 0){
-                $evento->cancelo_no_asistio = 1;                
+                $evento->cancelo_no_asistio = 1;
+                $evento->color = "yellow";
             }else{
-                $evento->cancelo_no_asistio = 0;                
-            }
+                $evento->cancelo_no_asistio = 0;
+                $evento->color = "";                
+            }            
             $evento->save(false);
             $this->redirect(["evento/index"]);
         } else {
@@ -228,94 +252,47 @@ use yii\web\UploadedFile;
     
         public function actionIndexevento()
         {
-            if (!Yii::$app->user->isGuest) {                                
-                 $events = Eventos::find()->all();
-                foreach ($events as $event){
-                    $event = new Eventos;
-                    $event->id = 1;
-                    $event->asunto = 'Testing';
-                    $event->fechai = date('Y-m-d\Th:m:s\Z');
-                    $events[] = $event;
+            if (!Yii::$app->user->isGuest) {
+                $usuario = \app\models\Users::find()->where(['=','id',Yii::$app->user->identity->id])->one();
+                $usuarioperfil = $usuario->role;
+                $usuariosede = $usuario->sede_fk;
+                $form = new FormFiltroEventoAgenda();
+                $sede_fk = null;
+                $maquina = null;
+                if ($form->load(Yii::$app->request->get())) {
+                    if ($form->validate()) {
+                        $maquina = Html::encode($form->maquina);
+                        $sede_fk = Html::encode($form->sede_fk);
+                        $events = Eventos::find()                            
+                            ->andFilterWhere(['like', 'maquina', $maquina])
+                            ->andFilterWhere(['like', 'sede_fk', $sede_fk])
+                            ->all();
+                       
+                        return $this->render('indexevento', [
+                        'events' => $events,                        
+                        'form' => $form,
+                    ]); 
+                    } else {
+                        $form->getErrors();
+                    }
+                }else{
+                    if ($usuarioperfil == 2) { //administrador
+                        $events = Eventos::find()->all();
+                    }else{ //administrativo
+                        $events = Eventos::find()->where(['=','sede_fk',$usuariosede])->all();
+                    }                                    
+
+                    return $this->render('indexevento', [
+                        'events' => $events,                        
+                        'form' => $form,
+                    ]);                    
                 }
-                 
-                return $this->render('indexevento', [
-                    'events' => $events,                                        
-                ]);
+                    
+                
             }else{
                 return $this->redirect(["site/login"]);
             }
 
-        }
-                
-        public function actionForm($start,$end)
-        {
-            return $this->renderAjax('form',[
-                'start'=>$start,
-                'end'=>$end
-            ]);
-        }
-
-        public function actionDropChild($id,$start,$end){
-            echo "ID=".$id." START=".$start." EBD=".$end;
-            //$model = Pilotproject::findOne(['ID'=>$id]);
-
-            //$model->PLAN_DATE1 = $start;
-            //$model->PLAN_DATE2 = $end;
-
-           // $model->save();
-        }
-
-        public function actionEventCalendarSchedule()
-        {
-            $aryEvent=[
-                    ['id' => '1', 'resourceId' => 'b', 'start' => '2016-05-07T02:00:00', 'end' => '2016-05-07T07:00:00', 'title' => 'event 1'],
-                    ['id' => '2', 'resourceId' => 'c', 'start' => '2016-05-07T05:00:00', 'end' => '2016-05-07T22:00:00', 'title' => 'event 2'],
-                    ['id' => '3', 'resourceId' => 'd', 'start' => '2016-05-06', 'end' => '2016-05-08', 'title' => 'event 3'],
-                    ['id' => '4', 'resourceId' => 'e', 'start' => '2016-05-07T03:00:00', 'end' => '2016-05-07T08:00:00', 'title' => 'event 4'],
-                    ['id' => '5', 'resourceId' => 'f', 'start' => '2016-05-07T00:30:00', 'end' => '2016-05-07T02:30:00', 'title' => 'event 5'],
-            ];
-
-            return Json::encode($aryEvent);
-        }
-
-        public function actionResourceCalendarSchedule()
-        {
-            $aryResource=[
-                    ['id' => 'a', 'title' => 'Daily Report'],
-                    ['id' => 'b', 'title' => 'Auditorium B', 'eventColor' => 'green'],
-                    ['id' => 'c', 'title' => 'Auditorium C', 'eventColor' => 'orange'],
-                    [
-                        'id'       => 'd', 'title' => 'Auditorium D',
-                        'children' => [
-                            ['id' => 'd1', 'title' => 'Room D1'],
-                            ['id' => 'd2', 'title' => 'Room D2'],
-                        ],
-                    ],
-                    ['id' => 'e', 'title' => 'Auditorium E'],
-                    ['id' => 'f', 'title' => 'Auditorium F', 'eventColor' => 'red'],
-                    ['id' => 'g', 'title' => 'Auditorium G'],
-                    ['id' => 'h', 'title' => 'Auditorium H'],
-                    ['id' => 'i', 'title' => 'Auditorium I'],
-                    ['id' => 'j', 'title' => 'Auditorium J'],
-                    ['id' => 'k', 'title' => 'Auditorium K'],
-                    ['id' => 'l', 'title' => 'Auditorium L'],
-                    ['id' => 'm', 'title' => 'Auditorium M'],
-                    ['id' => 'n', 'title' => 'Auditorium N'],
-                    ['id' => 'o', 'title' => 'Auditorium O'],
-                    ['id' => 'p', 'title' => 'Auditorium P'],
-                    ['id' => 'q', 'title' => 'Auditorium Q'],
-                    ['id' => 'r', 'title' => 'Auditorium R'],
-                    ['id' => 's', 'title' => 'Auditorium S'],
-                    ['id' => 't', 'title' => 'Auditorium T'],
-                    ['id' => 'u', 'title' => 'Auditorium U'],
-                    ['id' => 'v', 'title' => 'Auditorium V'],
-                    ['id' => 'w', 'title' => 'Auditorium W'],
-                    ['id' => 'x', 'title' => 'Auditorium X'],
-                    ['id' => 'y', 'title' => 'Auditorium Y'],
-                    ['id' => 'z', 'title' => 'Auditorium Z'],
-                ];
-
-            return Json::encode($aryResource);
-        }
+        }                                
 
 }

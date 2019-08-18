@@ -29,7 +29,14 @@ $this->title = 'Nueva Cita';
 ?>
 
 <?php
-$sede = ArrayHelper::map(\app\models\Sedes::find()->where(['=','estado',0])->all(), 'sede_pk','sede');
+$usuario = \app\models\Users::find()->where(['=','id',Yii::$app->user->identity->id])->one();
+$usuarioperfil = $usuario->role;
+$usuariosede = $usuario->sede_fk;
+if ($usuarioperfil == 2) { //administrador
+    $sede = ArrayHelper::map(\app\models\Sedes::find()->where(['=','estado',0])->all(), 'sede_pk','sede');
+}else{ //administrativo    
+    $sede = ArrayHelper::map(\app\models\Sedes::find()->where(['=','estado',0])->andWhere(['=','sede_pk',$usuariosede])->all(), 'sede_pk','sede');
+}
 $maquina = ArrayHelper::map(\app\models\Maquina::find()->where(['<>','id_maquina',0])->all(), 'id_maquina','maquina');
 $profesional = ArrayHelper::map(\app\models\Profesionales::find()->where(['=','estado',0])->all(), 'id_profesional','nombre');
 $cliente = ArrayHelper::map(\app\models\Cliente::find()->all(), 'identificacion','nombrecompleto');

@@ -28,16 +28,25 @@ use app\models\FormProtocoloNuevo;
         public function actionIndex()
         {
             if (!Yii::$app->user->isGuest) {
+                $usuario = \app\models\Users::find()->where(['=','id',Yii::$app->user->identity->id])->one();
+                $usuarioperfil = $usuario->role;
+                $usuariosede = $usuario->sede_fk; 
                 $form = new FormFiltroProtocolo;
                 $search = null;
                 if ($form->load(Yii::$app->request->get())) {
                     if ($form->validate()) {
                         $search = Html::encode($form->q);
-                        $table = ConsentimientoCliente::find()
-                            ->where(['like', 'consentimiento_cliente_pk', $search])
-                            ->orWhere(['like', 'identificacion', $search])
-                            ->orWhere(['like', 'nombre', $search])
-                            ->orderBy('consentimiento_cliente_pk desc');
+                        if ($usuarioperfil == 2) { //administrador
+                            $table = ConsentimientoCliente::find()
+                                ->andFilterWhere(['=', 'identificacion', $search])
+                                ->orderBy('consentimiento_cliente_pk desc');
+                        }else{
+                            $table = ConsentimientoCliente::find()
+                                ->where(['=','sede_fk',$usuariosede])    
+                                ->andFilterWhere(['=', 'identificacion', $search])
+                                ->orderBy('consentimiento_cliente_pk desc');
+                        }
+                            
                         $count = clone $table;
                         $pages = new Pagination([
                             'pageSize' => 20,
@@ -51,8 +60,15 @@ use app\models\FormProtocoloNuevo;
                         $form->getErrors();
                     }
                 } else {
-                    $table = ConsentimientoCliente::find()
+                    if ($usuarioperfil == 2) { //administrador
+                        $table = ConsentimientoCliente::find()
                         ->orderBy('consentimiento_cliente_pk desc');
+                    }else{ //administrativo
+                        $table = ConsentimientoCliente::find()
+                        ->where(['=','sede_fk',$usuariosede])
+                        ->orderBy('consentimiento_cliente_pk desc');
+                    }
+                    
                     $count = clone $table;
                     $pages = new Pagination([
                         'pageSize' => 20,

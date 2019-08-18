@@ -23,7 +23,7 @@ $form = ActiveForm::begin([
         ]);
 ?>
 
-<div class="panel panel-primary">
+<div class="panel panel-default panel-filters">
     <div class="panel-heading">
         Información Usuario
     </div>
@@ -36,7 +36,7 @@ $form = ActiveForm::begin([
         </div>        
         <div class="panel-footer text-right">            
             <a href="<?= Url::toRoute("site/usuarios") ?>" class="btn btn-primary"><span class='glyphicon glyphicon-circle-arrow-left'></span> Regresar</a>    
-            <?= Html::submitButton("<span class='glyphicon glyphicon-floppy-disk'></span> Guardar", ["class" => "btn btn-success",]) ?>
+            <?= Html::submitButton("<span class='glyphicon glyphicon-floppy-disk'></span> Guardar", ["class" => "btn btn-primary",]) ?>
         </div>
     </div>
 </div>

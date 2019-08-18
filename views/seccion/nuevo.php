@@ -30,7 +30,14 @@ $this->title = 'Nuevo Seccion Pago';
 ?>
     
 <?php
-$sede = ArrayHelper::map(\app\models\Sedes::find()->where(['=','estado',0])->all(), 'sede_pk','sede');
+$usuario = \app\models\Users::find()->where(['=','id',Yii::$app->user->identity->id])->one();
+$usuarioperfil = $usuario->role;
+$usuariosede = $usuario->sede_fk;
+if ($usuarioperfil == 2) { //administrador
+    $sede = ArrayHelper::map(\app\models\Sedes::find()->where(['=','estado',0])->all(), 'sede_pk','sede');
+}else{ //administrativo    
+    $sede = ArrayHelper::map(\app\models\Sedes::find()->where(['=','estado',0])->andWhere(['=','sede_pk',$usuariosede])->all(), 'sede_pk','sede');
+}
 $seccion = ArrayHelper::map(\app\models\SeccionTipo::find()->where(['=','estado',0])->all(), 'seccion_tipo_pk','tipo');
 $cliente = ArrayHelper::map(\app\models\Cliente::find()->all(), 'cliente_pk','nombrecompleto');
 ?>

@@ -24,6 +24,9 @@ use yii\web\UploadedFile;
         public function actionIndex()
         {
             if (!Yii::$app->user->isGuest) {
+                $usuario = \app\models\Users::find()->where(['=','id',Yii::$app->user->identity->id])->one();
+                $usuarioperfil = $usuario->role;
+                $usuariosede = $usuario->sede_fk;                
                 $form = new FormFiltroCliente;
                 $email = null;
                 $identificación = null;
@@ -43,7 +46,8 @@ use yii\web\UploadedFile;
                         $apellido2 = Html::encode($form->apellido2);
                         $telefono = Html::encode($form->telefono);
                         $celular = Html::encode($form->celular);
-                        $table = Cliente::find()
+                        if ($usuarioperfil == 2) { //administrador
+                            $table = Cliente::find()
                             ->andFilterWhere(['=', 'email', $email])
                             ->andFilterWhere(['=', 'identificacion', $identificación])
                             ->andFilterWhere(['like', 'nombre1', $nombre1])
@@ -53,6 +57,19 @@ use yii\web\UploadedFile;
                             ->andFilterWhere(['=', 'telefono', $telefono])
                             ->andFilterWhere(['=', 'celular', $celular])    
                             ->orderBy('cliente_pk desc');
+                        }else{ //administrativo
+                            $table = Cliente::find()
+                            ->where(['=','sede_fk',$usuariosede])        
+                            ->andFilterWhere(['=', 'email', $email])
+                            ->andFilterWhere(['=', 'identificacion', $identificación])
+                            ->andFilterWhere(['like', 'nombre1', $nombre1])
+                            ->andFilterWhere(['like', 'nombre2', $nombre2])
+                            ->andFilterWhere(['like', 'apellido1', $apellido1])
+                            ->andFilterWhere(['like', 'apellido2', $apellido2])
+                            ->andFilterWhere(['=', 'telefono', $telefono])
+                            ->andFilterWhere(['=', 'celular', $celular])    
+                            ->orderBy('cliente_pk desc');
+                        }                                                
                         $count = clone $table;
                         $pages = new Pagination([
                             'pageSize' => 20,
@@ -66,8 +83,14 @@ use yii\web\UploadedFile;
                         $form->getErrors();
                     }
                 } else {
-                    $table = Cliente::find()
+                    if ($usuarioperfil == 2) { //administrador
+                        $table = Cliente::find()
                         ->orderBy('cliente_pk desc');
+                    }else{ //administrativo
+                        $table = Cliente::find()
+                        ->where(['=','sede_fk',$usuariosede])        
+                        ->orderBy('cliente_pk desc');
+                    }                    
                     $count = clone $table;
                     $pages = new Pagination([
                         'pageSize' => 20,

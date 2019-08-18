@@ -26,16 +26,30 @@ class SeccionController extends Controller {
 
     public function actionIndex() {
         if (!Yii::$app->user->isGuest) {
+            $usuario = \app\models\Users::find()->where(['=','id',Yii::$app->user->identity->id])->one();
+            $usuarioperfil = $usuario->role;
+            $usuariosede = $usuario->sede_fk;    
             $form = new FormFiltroSeccion;            
             $identificacion = null;            
             if ($form->load(Yii::$app->request->get())) {
                 if ($form->validate()) {                    
                     $identificacion = Html::encode($form->identificacion);
                     $cliente = Cliente::find()->where(['=','identificacion',$identificacion])->one();
-                    $table = Seccion::find()
-                            ->where(['<>', 'seccion_pk', 0])
-                            ->andFilterWhere(['like', 'cliente_fk', $cliente->cliente_pk])                            
+                    if($cliente){
+                        $dato = $cliente->cliente_pk;
+                    }else{
+                        $dato = "";
+                    }
+                    if ($usuarioperfil == 2) { //administrador
+                        $table = Seccion::find()                            
+                            ->andFilterWhere(['=', 'cliente_fk', $dato])                            
                             ->orderBy('seccion_pk desc');
+                    }else{ //administrativo
+                        $table = Seccion::find()                            
+                            ->andWhere(['=', 'sede_fk', $usuariosede])
+                            ->andFilterWhere(['=', 'cliente_fk', $dato])                            
+                            ->orderBy('seccion_pk desc');
+                    }                    
                     $count = clone $table;
                     $pages = new Pagination([
                         'pageSize' => 20,
@@ -49,9 +63,14 @@ class SeccionController extends Controller {
                     $form->getErrors();
                 }
             } else {
-                $table = Seccion::find()
-                        ->where(['<>', 'seccion_pk', 0])                                                    
+                if ($usuarioperfil == 2) { //administrador
+                    $table = Seccion::find()                                                                              
                         ->orderBy('seccion_pk desc');
+                }else{ //administrativo
+                    $table = Seccion::find()                        
+                        ->andWhere(['=', 'sede_fk', $usuariosede])                                                       
+                        ->orderBy('seccion_pk desc');
+                }
                 $count = clone $table;
                 $pages = new Pagination([
                     'pageSize' => 20,

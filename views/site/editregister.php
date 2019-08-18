@@ -23,8 +23,10 @@ $form = ActiveForm::begin([
             ],
         ]);
 ?>
-
-<div class="panel panel-primary">
+<?php
+$sede = ArrayHelper::map(\app\models\Sedes::find()->where(['=','estado',0])->all(), 'sede_pk','sede');
+?>
+<div class="panel panel-default panel-filters">
     <div class="panel-heading">
         Información Usuario
     </div>
@@ -42,11 +44,14 @@ $form = ActiveForm::begin([
             <?= $form->field($model, "nombrecompleto")->input("text") ?>               
         </div>        
         <div class="row">            
-            <?= $form->field($model, 'activo')->dropdownList(['1' => 'ACTIVO', '0' => 'INACTIVO'], ['prompt' => 'Seleccione el estado del usuario']) ?>
+            <?= $form->field($model, 'activo')->dropdownList(['1' => 'ACTIVO', '0' => 'INACTIVO'], ['prompt' => 'Seleccione el estado del usuario']) ?>            
+        </div>
+        <div class="row">                        
+            <?= $form->field($model, 'sede_fk')->dropDownList($sede,['prompt' => 'Seleccione...' ]) ?>
         </div>
         <div class="panel-footer text-right">            
             <a href="<?= Url::toRoute("site/usuarios") ?>" class="btn btn-primary"><span class='glyphicon glyphicon-circle-arrow-left'></span> Regresar</a>    
-            <?= Html::submitButton("<span class='glyphicon glyphicon-floppy-disk'></span> Guardar", ["class" => "btn btn-success",]) ?>
+            <?= Html::submitButton("<span class='glyphicon glyphicon-floppy-disk'></span> Guardar", ["class" => "btn btn-primary",]) ?>
         </div>
     </div>
 </div>

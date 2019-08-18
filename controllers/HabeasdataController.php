@@ -27,16 +27,24 @@ use app\models\FormFirmaCliente;
         public function actionIndex()
         {
             if (!Yii::$app->user->isGuest) {
+                $usuario = \app\models\Users::find()->where(['=','id',Yii::$app->user->identity->id])->one();
+                $usuarioperfil = $usuario->role;
+                $usuariosede = $usuario->sede_fk;     
                 $form = new FormFiltroHabeasdata;
                 $search = null;
                 if ($form->load(Yii::$app->request->get())) {
                     if ($form->validate()) {
                         $search = Html::encode($form->q);
-                        $table = Habeasdata::find()
-                            ->where(['like', 'id', $search])
-                            ->orWhere(['like', 'identificacion', $search])
-                            ->orWhere(['like', 'nombre', $search])
+                        if ($usuarioperfil == 2) { //administrador
+                            $table = Habeasdata::find()                                                        
+                            ->andFilterWhere(['=', 'identificacion', $search])
                             ->orderBy('id desc');
+                        }else{//administrativo
+                            $table = Habeasdata::find()
+                            ->where(['=','sede_fk',$usuariosede])
+                            ->andFilterWhere(['=', 'identificacion', $search])
+                            ->orderBy('id desc');
+                        }                        
                         $count = clone $table;
                         $pages = new Pagination([
                             'pageSize' => 20,
@@ -50,8 +58,14 @@ use app\models\FormFirmaCliente;
                         $form->getErrors();
                     }
                 } else {
-                    $table = Habeasdata::find()
+                    if ($usuarioperfil == 2) { //administrador
+                        $table = Habeasdata::find()                                                                                
                         ->orderBy('id desc');
+                    }else{//administrativo
+                        $table = Habeasdata::find()
+                        ->where(['=','sede_fk',$usuariosede])                        
+                        ->orderBy('id desc');
+                    }
                     $count = clone $table;
                     $pages = new Pagination([
                         'pageSize' => 20,
