@@ -11,13 +11,13 @@ use kartik\date\DatePicker;
 use yii\helpers\ArrayHelper;
 use moonland\phpexcel\Excel;
 
-$this->title = 'Informe Pagos';
+$this->title = 'Informe Pagos cc';
 ?>
 
-<h1>Informe Pagos</h1>
+<h1>Informe Pagos cc</h1>
 <?php $formulario = ActiveForm::begin([
     "method" => "get",
-    "action" => Url::toRoute("informepago/index"),
+    "action" => Url::toRoute("informepago/indexcc"),
     "enableClientValidation" => true,
     'options' => ['class' => 'form-horizontal'],
     'fieldConfig' => [
@@ -57,7 +57,7 @@ $sede = ArrayHelper::map(\app\models\Sedes::find()->where(['=','estado',0])->all
             </div>
         <div class="panel-footer text-right">
             <?= Html::submitButton("Buscar", ["class" => "btn btn-primary"]) ?>
-            <a align="right" href="<?= Url::toRoute("informepago/index") ?>" class="btn btn-primary">Actualizar</a>
+            <a align="right" href="<?= Url::toRoute("informepago/indexcc") ?>" class="btn btn-primary">Actualizar</a>
         </div>
     </div>
 </div>    
@@ -92,7 +92,7 @@ $sede = ArrayHelper::map(\app\models\Sedes::find()->where(['=','estado',0])->all
   </div>
 </div>
 
-<div class="alert alert-info">Registros: <?= $pagination->totalCount ?> <a class="btn btn-default" data-toggle="modal" data-target="#myModal">Ver informe</a></div>
+<div class="alert alert-info">Registros: <?= $pagination->totalCount ?> <a class="btn btn-default" data-toggle="modal" data-target="#myModal">Ver informe cc</a></div>
 <div class="table-condensed">
     <table class="table table-condensed">
         <thead>
@@ -107,9 +107,7 @@ $sede = ArrayHelper::map(\app\models\Sedes::find()->where(['=','estado',0])->all
                 <th scope="col">Sede</th>
                 <th scope="col">Pagado</th>
                 <th scope="col">Anulado</th>
-                <th scope="col">Observaciones</th> 
-                <th scope="col">Cc</th> 
-                <th></th>
+                <th scope="col">Observaciones</th>                 
             </tr>
         </thead>
         <tbody>
@@ -140,9 +138,7 @@ $sede = ArrayHelper::map(\app\models\Sedes::find()->where(['=','estado',0])->all
                     <td><?= $val->sedeFk->sede ?></td>                    
                     <td align="center"><?= $pagado ?></td>                 
                     <td align="center"><?= $anulado ?></td>
-                    <td><?= $val->observaciones ?></td>
-                    <td><?= $cc ?></td>
-                    <td><a href="<?= Url::toRoute(["informepago/cc", "id" => $val->seccion_pk]) ?>" ><img src="svg/si-glyph-document-checked.svg" align="center" width="20px" height="20px" title="cc"></a></td>                   
+                    <td><?= $val->observaciones ?></td>                  
                 </tr>
             </tbody>
 <?php endforeach; ?>

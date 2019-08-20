@@ -86,6 +86,31 @@ use yii\web\UploadedFile;
                     } else {
                         $form->getErrors();
                     }
+                    if(isset($_POST['excel'])){
+                        if ($usuarioperfil == 2) { //administrador
+                            $table = Eventos::find()
+                            ->andFilterWhere(['like', 'fechai', $fecha])
+                            ->andFilterWhere(['=', 'identificacion', $identificación])
+                            ->andFilterWhere(['like', 'nombres', $cliente])
+                            ->andFilterWhere(['like', 'maquina', $maquina])
+                            ->andFilterWhere(['like', 'sede_fk', $sede])   
+                            ->orderBy('fechai desc');
+                        }else{//administrativo
+                            $table = Eventos::find()
+                            ->where(['=', 'sede_fk', $usuariosede])
+                            ->andFilterWhere(['like', 'fechai', $fecha])
+                            ->andFilterWhere(['=', 'identificacion', $identificación])
+                            ->andFilterWhere(['like', 'nombres', $cliente])
+                            ->andFilterWhere(['like', 'maquina', $maquina])
+                            ->andFilterWhere(['like', 'sede_fk', $sede])   
+                            ->orderBy('fechai desc');
+                        }
+                        $model = $table
+                            ->offset($pages->offset)
+                            ->limit($pages->limit)
+                            ->all();
+                        $this->actionExcel($model);                    
+                    }
                 } else {
                     if ($usuarioperfil == 2) { //administrador
                         $table = Eventos::find()                           
@@ -104,6 +129,9 @@ use yii\web\UploadedFile;
                         ->offset($pages->offset)
                         ->limit($pages->limit)
                         ->all();
+                    if(isset($_POST['excel'])){
+                        //$this->actionExcel($model);                    
+                    }
                 }
                 return $this->render('index', [
                     'model' => $model,
@@ -145,20 +173,32 @@ use yii\web\UploadedFile;
                     $table->maquina = $model->maquina;                                                                               
                     $table->sede_fk = $model->sede_fk;
                     $table->observaciones = $model->observaciones;
-                    if ($table->insert()) {
-                        $msg = "Registros guardados correctamente";
-                        $model->identificacion = null;                        
-                        $model->asunto = null;                       
-                        $model->fechai = null;
-                        $model->horai = null;
-                        $model->id_profesional = null;                        
-                        $model->telefono = null;
-                        $model->maquina = null;
-                        $model->sede_fk = null;
-                        $model->observaciones = null;                        
-                    } else {
-                        $msg = "error";
-                    }
+                    $consultacitarep = Eventos::find()
+                            ->where(['=','fechai',$table->fechai])
+                            ->andWhere(['=','sede_fk',$table->sede_fk])
+                            ->andWhere(['=','maquina',$table->maquina])
+                            ->andWhere(['=','cancelo_no_asistio',0])                            
+                            ->all();
+                    if (!$consultacitarep){
+                        if ($table->insert()) {
+                            $msg = "Registros guardados correctamente";
+                            $model->identificacion = null;                        
+                            $model->asunto = null;                       
+                            $model->fechai = null;
+                            $model->horai = null;
+                            $model->id_profesional = null;                        
+                            $model->telefono = null;
+                            $model->maquina = null;
+                            $model->sede_fk = null;
+                            $model->observaciones = null;                        
+                        } else {
+                            $tipomsg = "danger";
+                            $msg = "Error en la insercion";
+                        }
+                    }else{
+                        $tipomsg = "danger";
+                        $msg = "Ya existe una cita programada en ese horario, en la misma sede y con la misma maquina";                        
+                    }    
                 } else {
                     $model->getErrors();
                 }
@@ -195,12 +235,24 @@ use yii\web\UploadedFile;
                         $table->telefono = $model->telefono;
                         $table->maquina = $model->maquina;                                                                               
                         $table->sede_fk = $model->sede_fk;
-                        $table->observaciones = $model->observaciones;                       
-                        if ($table->update()) {
-                            $msg = "El registro ha sido actualizado correctamente";
-                        } else {
-                            $msg = "El registro no sufrio ningun cambio";
+                        $table->observaciones = $model->observaciones;
+                        $consultacitarep = Eventos::find()
+                            ->where(['=','fechai',$table->fechai])
+                            ->andWhere(['=','sede_fk',$table->sede_fk])
+                            ->andWhere(['=','maquina',$table->maquina])
+                            ->andWhere(['=','cancelo_no_asistio',0])
+                            ->andWhere(['<>','id',$model->id])    
+                            ->all();
+                        if (!$consultacitarep){
+                            if ($table->update()) {
+                                $msg = "El registro ha sido actualizado correctamente";
+                            } else {
+                                $msg = "El registro no sufrio ningun cambio";
+                                $tipomsg = "danger";
+                            }                            
+                        }else{
                             $tipomsg = "danger";
+                            $msg = "Ya existe una cita programada en ese horario, en la misma sede y con la misma maquina";  
                         }
                     } else {
                         $msg = "El registro seleccionado no ha sido encontrado";
@@ -234,21 +286,21 @@ use yii\web\UploadedFile;
         }
         
         public function actionCancelar($id) {
-        if (Yii::$app->request->get()) {
-            $evento = Eventos::findOne($id);
-            if ($evento->cancelo_no_asistio == 0){
-                $evento->cancelo_no_asistio = 1;
-                $evento->color = "yellow";
-            }else{
-                $evento->cancelo_no_asistio = 0;
-                $evento->color = "";                
-            }            
-            $evento->save(false);
-            $this->redirect(["evento/index"]);
-        } else {
-            $this->redirect(["evento/index"]);
+            if (Yii::$app->request->get()) {
+                $evento = Eventos::findOne($id);
+                if ($evento->cancelo_no_asistio == 0){
+                    $evento->cancelo_no_asistio = 1;
+                    $evento->color = "yellow";
+                }else{
+                    $evento->cancelo_no_asistio = 0;
+                    $evento->color = "";                
+                }            
+                $evento->save(false);
+                $this->redirect(["evento/index"]);
+            } else {
+                $this->redirect(["evento/index"]);
+            }
         }
-    }
     
         public function actionIndexevento()
         {
@@ -293,6 +345,87 @@ use yii\web\UploadedFile;
                 return $this->redirect(["site/login"]);
             }
 
-        }                                
+        }  
+        
+        public function actionExcel($model) {
+        //$costoproducciondiario = CostoProduccionDiaria::find()->all();
+        $objPHPExcel = new \PHPExcel();
+        // Set document properties
+        $objPHPExcel->getProperties()->setCreator("EMPRESA")
+            ->setLastModifiedBy("EMPRESA")
+            ->setTitle("Office 2007 XLSX Test Document")
+            ->setSubject("Office 2007 XLSX Test Document")
+            ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
+            ->setKeywords("office 2007 openxml php")
+            ->setCategory("Test result file");
+        $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10);
+        $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setAutoSize(true); 
+        $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setAutoSize(true); 
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A1', 'Id')
+                    ->setCellValue('B1', 'Fecha Cita')
+                    ->setCellValue('C1', 'Hora Inicio')                    
+                    ->setCellValue('D1', 'Hora Final')                    
+                    ->setCellValue('E1', 'Asunto')
+                    ->setCellValue('F1', 'Cliente')
+                    ->setCellValue('G1', 'Documento')
+                    ->setCellValue('H1', 'Sede')
+                    ->setCellValue('I1', 'Maquina')
+                    ->setCellValue('J1', 'Telefono')
+                    ->setCellValue('k1', 'Canceló');
+
+        $i = 2;
+        
+        foreach ($model as $val) {
+            if ($val->cancelo_no_asistio == 0) {
+                $cancelo = "NO";
+            } else {
+                $cancelo = "SI";
+            }            
+            $objPHPExcel->setActiveSheetIndex(0)                    
+                    ->setCellValue('A' . $i, $val->id)
+                    ->setCellValue('B' . $i, date("Y-m-d",strtotime($val->fechai)))
+                    ->setCellValue('C' . $i, date("H:i",strtotime($val->fechai)))
+                    ->setCellValue('D' . $i, date("H:i",strtotime($val->fechat)))
+                    ->setCellValue('E' . $i, $val->asunto)
+                    ->setCellValue('F' . $i, $val->nombres)
+                    ->setCellValue('G' . $i, $val->identificacion)
+                    ->setCellValue('H' . $i, $val->sedeFk->sede)
+                    ->setCellValue('I' . $i, $val->maquina0->maquina)
+                    ->setCellValue('J' . $i, $val->telefono)
+                    ->setCellValue('K' . $i, $val->cancelo);
+            $i++;
+        }
+
+        $objPHPExcel->getActiveSheet()->setTitle('citas');
+        $objPHPExcel->setActiveSheetIndex(0);
+
+        // Redirect output to a client’s web browser (Excel2007)
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="citas.xlsx"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+        // If you're serving to IE over SSL, then the following may be needed
+        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header ('Pragma: public'); // HTTP/1.0
+        $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
+        $objWriter->save('php://output');
+        //return $model;
+        exit;
+        
+    }
 
 }

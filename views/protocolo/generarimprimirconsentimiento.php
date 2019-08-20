@@ -77,9 +77,9 @@ class PDF extends FPDF {
 	$pdf->Cell(18, 5, "Correo:", 0, 0, 'J');
 	$pdf->Cell(18, 5, $cliente->email, 0, 0, 'J');
 	$pdf->SetXY(10, 20);
-        $rutafirma = "firmaCliente/".$model->firma; //ruta firma estudiante	
+        $rutafirma = "firmaCliente/".$model->firma; //ruta firma cliente	
 	$pdf->Image($rutafirma,17, 36, 50, 15);	
-        $rutadoctor = "images/".$model->sede_fk; //ruta firma doctor	
+        $rutadoctor = "firmaCliente/".'sede_1'; //ruta firma doctor	
 	$pdf->Image($rutadoctor.'.PNG',17, 75, 35, 18);
     }
 
