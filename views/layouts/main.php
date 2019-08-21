@@ -100,7 +100,7 @@ if (!Yii::$app->user->isGuest) {
                     ['label' => 'Otros', 'url' => ['/site/index']],
                 ]
             ],
-            [
+            /*[
                 'label' => 'Procesos',
                 'items' => [                    
                     ['label' => 'Otros', 'url' => ['/site/index']],
@@ -111,7 +111,7 @@ if (!Yii::$app->user->isGuest) {
                 'items' => [
                     //['label' => 'Informe Pagos', 'url' => ['/informepago/index']],                    
                 ]
-            ],
+            ],*/
             [
                 'label' => 'Movimientos',
                 'items' => [                                        
@@ -123,13 +123,13 @@ if (!Yii::$app->user->isGuest) {
                     ['label' => 'HabeasData', 'url' => ['/habeasdata/index']],
                 ]
             ],            
-            [                
+            /*[                
                 'label' => 'Config',
                 'items' => [
                     //['label' => 'Usuarios', 'url' => ['/site/usuarios']],
                     ['label' => 'Otros', 'url' => ['/site/index']],
                 ],                
-            ]
+            ]*/
         ],
     ]);
     }

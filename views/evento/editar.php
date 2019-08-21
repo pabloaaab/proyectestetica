@@ -61,7 +61,8 @@ $cliente = ArrayHelper::map(\app\models\Cliente::find()->all(), 'identificacion'
                 'pluginOptions' => [
                     'format' => 'yyyy-mm-dd',
                     'todayHighlight' => true]]) ?>
-        <?= $form->field($model, 'horai')->input("time") ?>                
+        <?= $form->field($model, 'horai')->input("time") ?>
+        <?= $form->field($model, 'horaf')->input("time") ?>
         <?= $form->field($model, 'id_profesional')->dropDownList($profesional,['prompt' => 'Seleccione...' ]) ?>
         <?= $form->field($model, 'telefono')->input("text") ?>
         <?= $form->field($model, 'observaciones')->input("text") ?>                        

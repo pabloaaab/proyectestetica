@@ -62,7 +62,7 @@ use yii\web\UploadedFile;
                             ->andFilterWhere(['like', 'nombres', $cliente])
                             ->andFilterWhere(['like', 'maquina', $maquina])
                             ->andFilterWhere(['like', 'sede_fk', $sede])   
-                            ->orderBy('fechai desc');
+                            ->orderBy('fechai asc');
                         }else{//administrativo
                             $table = Eventos::find()
                             ->where(['=', 'sede_fk', $usuariosede])
@@ -71,7 +71,7 @@ use yii\web\UploadedFile;
                             ->andFilterWhere(['like', 'nombres', $cliente])
                             ->andFilterWhere(['like', 'maquina', $maquina])
                             ->andFilterWhere(['like', 'sede_fk', $sede])   
-                            ->orderBy('fechai desc');
+                            ->orderBy('fechai asc');
                         }
                         
                         $count = clone $table;
@@ -94,7 +94,7 @@ use yii\web\UploadedFile;
                             ->andFilterWhere(['like', 'nombres', $cliente])
                             ->andFilterWhere(['like', 'maquina', $maquina])
                             ->andFilterWhere(['like', 'sede_fk', $sede])   
-                            ->orderBy('fechai desc');
+                            ->orderBy('fechai asc');
                         }else{//administrativo
                             $table = Eventos::find()
                             ->where(['=', 'sede_fk', $usuariosede])
@@ -103,7 +103,7 @@ use yii\web\UploadedFile;
                             ->andFilterWhere(['like', 'nombres', $cliente])
                             ->andFilterWhere(['like', 'maquina', $maquina])
                             ->andFilterWhere(['like', 'sede_fk', $sede])   
-                            ->orderBy('fechai desc');
+                            ->orderBy('fechai asc');
                         }
                         $model = $table
                             ->offset($pages->offset)
@@ -114,11 +114,11 @@ use yii\web\UploadedFile;
                 } else {
                     if ($usuarioperfil == 2) { //administrador
                         $table = Eventos::find()                           
-                        ->orderBy('fechai desc');
+                        ->orderBy('fechai asc');
                     }else{//administrativo
                         $table = Eventos::find()
                         ->where(['=', 'sede_fk', $usuariosede])                           
-                        ->orderBy('fechai desc');
+                        ->orderBy('fechai asc');
                     }
                     $count = clone $table;
                     $pages = new Pagination([
@@ -162,12 +162,13 @@ use yii\web\UploadedFile;
                     $table->nombres = $cliente->nombrecompletosinidentificacion;
                     $table->asunto = $model->asunto;                    
                     $table->fechai = date("Y-m-d",strtotime($model->fechai)).' '.$model->horai;
-                    $fecha = $table->fechai;
-                    $minutos = Maquina::find()->where(['=','id_maquina',$model->maquina])->one();
+                    //$fechai = $table->fechai;
+                    $table->fechat = date("Y-m-d",strtotime($model->fechai)).' '.$model->horaf;                    
+                    /*$minutos = Maquina::find()->where(['=','id_maquina',$model->maquina])->one();
                     $minutos = '+'.$minutos->duracion.' minute';
                     $nuevafecha = strtotime ( $minutos , strtotime ( $fecha ) ) ;                    
-                    $nuevafecha = date ( 'Y-m-d H:i:s' , $nuevafecha );
-                    $table->fechat = $nuevafecha;
+                    $nuevafecha = date ( 'Y-m-d H:i:s' , $nuevafecha );*/
+                    //$table->fechat = $nuevafecha;
                     $table->id_profesional = $model->id_profesional;                    
                     $table->telefono = $model->telefono;
                     $table->maquina = $model->maquina;                                                                               
@@ -186,6 +187,7 @@ use yii\web\UploadedFile;
                             $model->asunto = null;                       
                             $model->fechai = null;
                             $model->horai = null;
+                            $model->horaf = null;
                             $model->id_profesional = null;                        
                             $model->telefono = null;
                             $model->maquina = null;
@@ -225,12 +227,13 @@ use yii\web\UploadedFile;
                         $table->nombres = $cliente->nombrecompletosinidentificacion;
                         $table->asunto = $model->asunto;                    
                         $table->fechai = date("Y-m-d",strtotime($model->fechai)).' '.$model->horai;
-                        $fecha = $table->fechai;
-                        $minutos = Maquina::find()->where(['=','id_maquina',$model->maquina])->one();
-                        $minutos = '+'.$minutos->duracion.' minute';
-                        $nuevafecha = strtotime ( $minutos , strtotime ( $fecha ) ) ;                    
-                        $nuevafecha = date ( 'Y-m-d H:i:s' , $nuevafecha );
-                        $table->fechat = $nuevafecha;
+                        $table->fechat = date("Y-m-d",strtotime($model->fechai)).' '.$model->horaf;
+                        //$fecha = $table->fechai;
+                        //$minutos = Maquina::find()->where(['=','id_maquina',$model->maquina])->one();
+                        //$minutos = '+'.$minutos->duracion.' minute';
+                        //$nuevafecha = strtotime ( $minutos , strtotime ( $fecha ) ) ;                    
+                        //$nuevafecha = date ( 'Y-m-d H:i:s' , $nuevafecha );
+                        //$table->fechat = $nuevafecha;
                         $table->id_profesional = $model->id_profesional;                    
                         $table->telefono = $model->telefono;
                         $table->maquina = $model->maquina;                                                                               
@@ -272,6 +275,7 @@ use yii\web\UploadedFile;
                     $model->maquina = $table->maquina;
                     $model->fechai = date("Y-m-d",strtotime($table->fechai));
                     $model->horai = date("H:i:s",strtotime($table->fechai));
+                    $model->horaf = date("H:i:s",strtotime($table->fechat));
                     $model->telefono = $table->telefono;
                     $model->id_profesional = $table->id_profesional;
                     $model->observaciones = $table->observaciones;                    

@@ -15,8 +15,9 @@ class FormEvento extends Model
     public $id;
     public $asunto;
     public $identificacion;
-    public $fechai;        
-    public $horai;                   
+    public $fechai;
+    public $horai;  
+    public $horaf;
     public $sede_fk;     
     public $id_profesional;
     public $maquina;
@@ -26,7 +27,7 @@ class FormEvento extends Model
     public function rules()
     {                                    
         return [
-            [['asunto', 'sede_fk', 'identificacion', 'maquina','fechai','horai','id_profesional'], 'required'],            
+            [['asunto', 'sede_fk', 'identificacion', 'maquina','fechai','horai','horaf','id_profesional'], 'required'],            
             [['asunto', 'observaciones'], 'string'],
             [['fechai', 'fechat'], 'safe'],
             ['id' , 'default'],
@@ -53,7 +54,8 @@ class FormEvento extends Model
             'observaciones' => 'Observaciones',
             'telefono' => 'Telefono',
             'identificacion' => 'Paciente/Cliente',
-            'horai' => 'Hora Consulta',
+            'horai' => 'Hora Inicio Consulta',
+            'horaf' => 'Hora FInal Consulta',
         ];
     }
     
