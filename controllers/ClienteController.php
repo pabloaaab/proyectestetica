@@ -135,6 +135,9 @@ use yii\web\UploadedFile;
                     $table->email = $model->email;
                     $table->direccion = $model->direccion;                                        
                     $table->sede_fk = $model->sede_fk;
+                    $table->fechacreacion = date('Y-m-d H:i:s');
+                    $table->ultimafechaseccion = date('Y-m-d H:i:s');
+                    $table->ultimafechaseccionf = date('Y-m-d H:i:s');
                     if ($table->save(false)) {
                         $msg = "Registros guardados correctamente";
                         $model->identificacion = null;

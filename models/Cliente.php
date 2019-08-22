@@ -55,7 +55,8 @@ class Cliente extends \yii\db\ActiveRecord
             ['identificacion', 'identificacion_existe'],
             [['nombre1', 'nombre2', 'apellido1', 'apellido2', 'telefono', 'celular'], 'string', 'max' => 15],
             [['direccion'], 'string', 'max' => 200],
-            [['email'], 'email'],                        
+            [['email'], 'email'],
+            [['fechacreacion','ultimafechaseccion','ultimafechaseccionf'], 'default'],
             [['sede_fk'], 'exist', 'skipOnError' => true, 'targetClass' => Sedes::className(), 'targetAttribute' => ['sede_fk' => 'sede_pk']],
         ];
     }
