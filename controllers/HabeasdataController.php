@@ -107,7 +107,7 @@ use app\models\FormFirmaCliente;
                     $table->sede_fk = $model->sede_fk;                                        
                     $table->autorizacion = $model->autorizacion;
                     $table->fechaautorizacion = $model->fechaautorizacion;
-                    $table->fecha_creacion = date('Y-m-d');
+                    $table->fecha_creacion = date('Y-m-d');                    
                     if ($table->insert()) {
                         $msg = "Registros guardados correctamente";
                         $model->identificacion = null;
@@ -115,10 +115,10 @@ use app\models\FormFirmaCliente;
                         $model->sede_fk = null;
                         $model->autorizacion = null;                                                
                         $model->fechaautorizacion = null;
-                        
                     } else {
                         $msg = "error";
-                    }
+                        $tipomsg = 'danger';
+                    }                       
                 } else {
                     $model->getErrors();
                 }

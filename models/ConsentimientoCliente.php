@@ -37,10 +37,10 @@ class ConsentimientoCliente extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['identificacion'], 'required'],
-            ['consentimiento_cliente_pk', 'default'],
-            ['identificacion', 'identificacion_no_existe'],
+            ['consentimiento_cliente_pk', 'match', 'pattern' => '/^[0-9\s]+$/i', 'message' => 'Sólo se aceptan números'],
+            [['identificacion'], 'required'],            
             ['identificacion', 'identificacion_existe'],
+            ['identificacion', 'identificacion_no_existe'],
             [['fecha_creacion', 'fecha_modificacion', 'fechaconsentimiento'], 'safe'],
             [['sede_fk', 'consentimiento'], 'integer'],
             [['nombre'], 'string', 'max' => 100],
@@ -77,29 +77,7 @@ class ConsentimientoCliente extends \yii\db\ActiveRecord
     public function getSedeFk()
     {
         return $this->hasOne(Sedes::className(), ['sede_pk' => 'sede_fk']);
-    }
-    
-    public function identificacion_no_existe($attribute, $params)
-    {
-        //Buscar la cedula/nit en la tabla
-        $table = Cliente::find()->where("identificacion=:identificacion", [":identificacion" => $this->identificacion]);
-        //Si la identificacion no existe en Cliente mostrar el error
-        if ($table->count() == 0)
-        {
-            $this->addError($attribute, "El número de identificación No existe en clientes, por favor realizar la inscripción");
-        }
-    }
-    
-    public function identificacion_existe($attribute, $params)
-    {
-        //Buscar la identificacion en la tabla
-        $table = ConsentimientoCliente::find()->where("identificacion=:identificacion", [":identificacion" => $this->identificacion])->andWhere("consentimiento_cliente_pk!=:consentimiento_cliente_pk", [':consentimiento_cliente_pk' => $this->consentimiento_cliente_pk]);
-        //Si la identificacion existe mostrar el error
-        if ($table->count() == 1)
-        {
-            $this->addError($attribute, "El número de identificación ya existe".$this->id);
-        }
-    }
+    }        
     
     public function getConsentimientos()
     {
@@ -119,5 +97,27 @@ class ConsentimientoCliente extends \yii\db\ActiveRecord
             $firmo = "NO";
         }
         return $firmo;
+    }
+    
+    public function identificacion_existe($attribute, $params)
+    {
+        //Buscar la identificacion en la tabla
+        $table = ConsentimientoCliente::find()->where("identificacion=:identificacion", [":identificacion" => $this->identificacion])->andWhere("consentimiento_cliente_pk!=:consentimiento_cliente_pk", [':consentimiento_cliente_pk' => $this->consentimiento_cliente_pk]);
+        //Si la identificacion existe mostrar el error
+        if ($table->count() == 1)
+        {
+            $this->addError($attribute, "El número de identificación ya existe ".$this->identificacion);
+        }
+    }
+    
+    public function identificacion_no_existe($attribute, $params)
+    {
+        //Buscar la cedula/nit en la tabla
+        $table = Cliente::find()->where("identificacion=:identificacion", [":identificacion" => $this->identificacion]);
+        //Si la identificacion no existe en Cliente mostrar el error
+        if ($table->count() == 0)
+        {
+            $this->addError($attribute, "El número de identificación No existe en clientes, por favor realizar la inscripción");
+        }
     }
 }

@@ -87,7 +87,7 @@ class Historia extends \yii\db\ActiveRecord
             [['identificacion', 'edad', 'consumo_grasa', 'consumo_azucar', 'fuma', 'alcohol', 'consumo_alcohol', 'duerme_bien', 'hace_ejercicio', 'aph_patologia', 'aph_quirurgicos', 'aph_alergicos', 'aph_toxicos', 'apm_agregar', 'apm_menarca', 'apm_embarazo', 'sede_fk'], 'string'],
             [['fecha_nacimiento'], 'safe'],
             [['telefono', 'celular'], 'required'],
-            ['id_historia','default'],
+            ['id_historia', 'match', 'pattern' => '/^[0-9\s]+$/i', 'message' => 'Sólo se aceptan números'],
             ['identificacion', 'identificacion_existe'],            
             ['identificacion', 'identificacion_no_existe'],
             [['observaciones', 'motivo_consulta', 'enfermedad_actual', 'revision_por_sistema', 'examen_fisico', 'af_observaciones', 'notas_clinicas'], 'string'],
@@ -174,7 +174,7 @@ class Historia extends \yii\db\ActiveRecord
         //Si la identificacion existe mostrar el error
         if ($table->count() == 1)
         {
-            $this->addError($attribute, "El número de identificación ya existe".$this->identificacion);
+            $this->addError($attribute, "El número de identificación ya existe ".$this->identificacion);
         }
     }
     
