@@ -16,6 +16,7 @@ use app\models\Cliente;
 use app\models\FormCliente;
 use yii\helpers\Url;
 use app\models\FormFiltroCliente;
+use app\models\FormFiltroFechaCliente;
 use yii\web\UploadedFile;
 
     class ClienteController extends Controller
@@ -102,6 +103,69 @@ use yii\web\UploadedFile;
                         ->all();
                 }
                 return $this->render('index', [
+                    'model' => $model,
+                    'form' => $form,                    
+                    'pagination' => $pages,
+
+                ]);
+            }else{
+                return $this->redirect(["site/login"]);
+            }
+
+        }
+        
+        public function actionIngresos()
+        {
+            if (!Yii::$app->user->isGuest) {                
+                $form = new FormFiltroFechaCliente;
+                $fecha = null;
+                $sede_fk = null;                
+                $anio_mes_dia = null;
+                if ($form->load(Yii::$app->request->get())) {
+                    if ($form->validate()) {
+                        $fechacreacion = Html::encode($form->fechacreacion);
+                        $sede_fk = Html::encode($form->sede_fk);
+                        $anio_mes_dia = Html::encode($form->anio_mes_dia);
+                        if ($anio_mes_dia == "dia"){
+                            $fechacreacion = $fechacreacion;
+                        }
+                        if ($anio_mes_dia == "mes"){
+                            $fechacreacion = date('Y-m', strtotime($fechacreacion));
+                        }
+                        if ($anio_mes_dia == "anio"){
+                            $fechacreacion = date('Y', strtotime($fechacreacion));
+                        }                        
+                        $table = Cliente::find()
+                            ->andFilterWhere(['like', 'fechacreacion', $fechacreacion])
+                            ->andFilterWhere(['like', 'sede_fk', $sede_fk])
+                            ->orderBy('fechacreacion desc');                                                
+                        $count = clone $table;
+                        $pages = new Pagination([
+                            'pageSize' => 50,
+                            'totalCount' => $count->count()
+                        ]);
+                        $model = $table
+                            ->offset($pages->offset)
+                            ->limit($pages->limit)
+                            ->all();
+                    } else {
+                        $form->getErrors();
+                    }                    
+                } else {                    
+                    $table = Cliente::find()
+                        ->Where(['=','cliente_pk',0])    
+                        ->orderBy('fechacreacion desc');                    
+                    $count = clone $table;
+                    $pages = new Pagination([
+                        'pageSize' => 35,
+                        'totalCount' => $count->count(),
+                    ]);
+                    $model = $table
+                        ->offset($pages->offset)
+                        ->limit($pages->limit)
+                        ->all();                    
+                }
+                return $this->render('ingresos', [
                     'model' => $model,
                     'form' => $form,                    
                     'pagination' => $pages,

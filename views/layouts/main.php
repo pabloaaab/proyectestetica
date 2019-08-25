@@ -62,7 +62,8 @@ if (!Yii::$app->user->isGuest) {
                 'label' => 'Utilidades',
                 'items' => [
                     ['label' => 'Informe Pagos', 'url' => ['/informepago/index']],
-                    ['label' => 'Informe Pagos CC', 'url' => ['/informepago/indexcc']],                    
+                    ['label' => 'Informe Pagos CC', 'url' => ['/informepago/indexcc']],
+                    ['label' => 'Informe Ingreso Clientes', 'url' => ['/cliente/ingresos']],
                 ]
             ],
             [

@@ -114,7 +114,11 @@ class SeccionController extends Controller {
                 $seccion->estado_pagado = "SI";
                 $seccion->total_pago = $seccion->valor_seccion;
                 $seccion->fecha_pago = date('Y-m-d H:i:s');
-                $seccion->save(false);                  
+                $seccion->save(false);
+                $cliente = Cliente::findOne($seccion->cliente_fk);
+                $cliente->ultimafechaseccion = $seccion->fecha;
+                $cliente->ultimafechaseccionf = $seccion->fecha;
+                $cliente->save(false);
                 return $this->redirect(["seccion/index"]);  
             }        
         }        
