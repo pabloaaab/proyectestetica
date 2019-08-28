@@ -13,10 +13,11 @@ use yii\filters\AccessControl;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use app\models\Cliente;
+use app\models\Seccion;
 use app\models\FormCliente;
 use yii\helpers\Url;
 use app\models\FormFiltroCliente;
-use app\models\FormFiltroFechaCliente;
+use app\models\FormFiltroFechaInasistentes;
 use yii\web\UploadedFile;
 
     class ClienteController extends Controller
@@ -169,6 +170,86 @@ use yii\web\UploadedFile;
                     'model' => $model,
                     'form' => $form,                    
                     'pagination' => $pages,
+
+                ]);
+            }else{
+                return $this->redirect(["site/login"]);
+            }
+
+        }
+        
+        public function actionInasistentes()
+        {
+            if (!Yii::$app->user->isGuest) {                
+                $form = new FormFiltroFechaInasistentes;
+                $fechaMesAnterior = null;
+                $fechaMesActual = null;
+                $msg = null;
+                $tipomsg = null;
+                if ($form->load(Yii::$app->request->get())) {
+                    if ($form->validate()) {
+                        $fechaMesAnterior = Html::encode($form->fechaMesAnterior);
+                        $fechaMesActual = Html::encode($form->fechaMesActual);
+                        if ($fechaMesAnterior){
+                            $fechaMesAnterior = date('Y-m', strtotime($fechaMesAnterior));
+                        }
+                        if ($fechaMesActual){
+                            $fechaMesActual = date('Y-m', strtotime($fechaMesActual));
+                        }
+                        if ($fechaMesAnterior < $fechaMesActual){
+                            $mesAnterior = Seccion::find()->andFilterWhere(['like', 'fecha', $fechaMesAnterior])->groupBy('cliente_fk')->all();
+                            $mesActual = Seccion::find()->andFilterWhere(['like', 'fecha', $fechaMesActual])->groupBy('cliente_fk')->all();
+                            foreach ($mesAnterior as $dato1) {
+                                $existe = 0;
+                                foreach ($mesActual as $dato2){
+                                    if ($dato1->cliente_fk == $dato2->cliente_fk){
+                                        $existe = $existe + 1;
+                                    }
+                                }
+                                if ($existe == 0){
+                                    $model[][] = $dato1->cliente_fk;
+                                    $registros = count($model);
+                                }                                
+                            }
+                        }
+                        if ($fechaMesAnterior > $fechaMesActual){
+                            $msg = 'El mes 1 no puede ser mayor al mes 2';
+                            $tipomsg = 'danger';
+                            $table = Seccion::find()
+                                ->Where(['=','seccion_pk',0])    
+                                ->orderBy('fecha desc')                    
+                                ->all();
+                            $model = $table;
+                            $registros = 0;
+                        }
+                        if ($fechaMesAnterior == $fechaMesActual){
+                            $msg = 'El mes 1 debe ser mayor al mes 2';
+                            $tipomsg = 'danger';
+                            $table = Seccion::find()
+                                ->Where(['=','seccion_pk',0])    
+                                ->orderBy('fecha desc')                    
+                                ->all();
+                            $model = $table;
+                            $registros = 0;
+                        }
+                    } else {
+                        $form->getErrors();
+                    }                    
+                } else {                    
+                    $table = Seccion::find()
+                        ->Where(['=','seccion_pk',0])    
+                        ->orderBy('fecha desc')                    
+                        ->all();
+                    $model = $table;
+                    $registros = 0;
+                                        
+                }
+                return $this->render('inasistentes', [
+                    'model' => $model,
+                    'form' => $form,
+                    'registros' => $registros,
+                    'msg' => $msg,
+                    'tipomsg' => $tipomsg
 
                 ]);
             }else{
