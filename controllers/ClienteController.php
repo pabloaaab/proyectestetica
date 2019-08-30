@@ -18,6 +18,7 @@ use app\models\FormCliente;
 use yii\helpers\Url;
 use app\models\FormFiltroCliente;
 use app\models\FormFiltroFechaInasistentes;
+use app\models\FormFiltroFechaCliente;
 use yii\web\UploadedFile;
 
     class ClienteController extends Controller
