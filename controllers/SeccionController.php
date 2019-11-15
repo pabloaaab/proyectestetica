@@ -68,7 +68,8 @@ class SeccionController extends Controller {
                         ->orderBy('seccion_pk desc');
                 }else{ //administrativo
                     $table = Seccion::find()                        
-                        ->andWhere(['=', 'sede_fk', $usuariosede])                                                       
+                        ->andWhere(['=', 'sede_fk', $usuariosede])
+                        ->andWhere(['=','seccion_pk',0])    
                         ->orderBy('seccion_pk desc');
                 }
                 $count = clone $table;
@@ -113,7 +114,7 @@ class SeccionController extends Controller {
                 $seccion->observaciones = $model->observaciones;                    
                 $seccion->estado_pagado = "SI";
                 $seccion->total_pago = $seccion->valor_seccion;
-                $seccion->fecha_pago = date('Y-m-d H:i:s');
+                $seccion->fecha_pago = date('Y-m-d H:i:s', false, 'America/Bogota');
                 $seccion->save(false);
                 $cliente = Cliente::findOne($seccion->cliente_fk);
                 $cliente->ultimafechaseccion = $seccion->fecha;
