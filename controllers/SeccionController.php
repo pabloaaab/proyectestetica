@@ -114,7 +114,7 @@ class SeccionController extends Controller {
                 $seccion->observaciones = $model->observaciones;                    
                 $seccion->estado_pagado = "SI";
                 $seccion->total_pago = $seccion->valor_seccion;
-                $seccion->fecha_pago = date('Y-m-d H:i:s', false, 'America/Bogota');
+                $seccion->fecha_pago = date('Y-m-d h:i:s', strtotime('-5 hours'));
                 $seccion->save(false);
                 $cliente = Cliente::findOne($seccion->cliente_fk);
                 $cliente->ultimafechaseccion = $seccion->fecha;

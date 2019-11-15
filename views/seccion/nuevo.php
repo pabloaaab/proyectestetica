@@ -123,7 +123,7 @@ $cliente = ArrayHelper::map(\app\models\Cliente::find()->all(), 'cliente_pk','no
                         'todayHighlight' => true]]) ?>
         <?php } else { ?>
         
-            <?= $form->field($model, 'fecha_seccion',['inputOptions' => ['value' => date('Y-m-d'), 'readonly' => true]])->input("text") ?>
+            <?= $form->field($model, 'fecha_seccion',['inputOptions' => ['value' => date('Y-m-d', strtotime('-5 hours')), 'readonly' => true]])->input("text") ?>
         
         <?php }  ?>
         
